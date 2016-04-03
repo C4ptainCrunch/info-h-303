@@ -56,6 +56,92 @@ Les contraintes sont les suivantes :
 
 
 \begin{description}
+\item[Utilisateur](
+    \underline{Id},
+    Email,
+    MotDePasse,
+    DateCretaion,
+    EstAdministrateur)
+
+\item[Etablissement](
+    \underline{Id},
+    Nom,
+    Telephone,
+    \textit{SiteWeb},
+    Rue,
+    Numero,
+    CodePostal,
+    Localite,
+    Latitude,
+    Longitude,
+    UtilisateurId)
+
+    \begin{itemize}
+        \item Etablissement.UtilisateurId référence Utilisateur.Id
+    \end{itemize}
+
+\item[Restaurant](
+    \underline{Id},
+    EtablissementId,
+    FourchettePrix,
+    PlacesMaximum,
+    Emporter,
+    Livraison,
+    DemiJoursOuverture)
+
+    \begin{itemize}
+        \item Restaurant.EtablissementId référence Etablissement.Id
+    \end{itemize}
+
+\item[Bar](
+    \underline{Id},
+    EtablissementId,
+    Fumeur,
+    Restauration)
+
+    \begin{itemize}
+        \item Bar.EtablissementId référence Etablissement.Id
+    \end{itemize}
+
+\item[Hotel](
+    \underline{Id},
+    EtablissementId,
+    Etoiles,
+    NombreChambres,
+    PrixChambreDouble)
+
+    \begin{itemize}
+        \item Hotel.EtablissementId référence Etablissement.Id
+    \end{itemize}
+
+\item[Commentaire](
+    \underline{Id},
+    EtablissementId,
+    UtilisateurId,
+    Date,
+    Score,
+    Texte)
+
+    \begin{itemize}
+        \item Commentaire.EtablissementId référence Etablissement.Id
+        \item Commentaire.UtilisateurId référence Utilisateur.Id
+    \end{itemize}
+
+\item[Label](
+    \underline{Id},
+    Nom)
+
+\item[LabelEtablissement](
+    \underline{Id},
+    EtablissementId,
+    UtilisateurId,
+    LabelId)
+
+    \begin{itemize}
+        \item LabelEtablissement.EtablissementId référence Etablissement.Id
+        \item LabelEtablissement.UtilisateurId référence Utilisateur.Id
+        \item LabelEtablissement.LabelId référence Label.Id
+    \end{itemize}
 
 \end{description}
 
