@@ -38,7 +38,7 @@
 
 Le diagramme se trouve en annexe, page \pageref{diagram}.
 
-\begin{figure}[Hbt]
+\begin{figure}[H]
     \includegraphics[angle=90, scale=0.6]{EA.pdf}
     \caption{Diagramme Entité-Association}
     \label{diagram}
@@ -151,7 +151,10 @@ Les contraintes sont les suivantes :
 
 Les contraintes sont les suivantes :
 \begin{itemize}
-  \item ...
+  \item L'\texttt{UtilisateurId} d'un \texttt{Etablissement} ne peut référencer qu'un \texttt{Utilisateur} dont le champ \texttt{EstAdministrateur} est vrai.
+  \item La \texttt{Latitude} (respectivement \texttt{Longitude}) d'un \texttt{Etablissement} doit appartenir à l'intervalte $[-90, 90]$ (respectivement $[-180, 180]$)
+  \item Le champ \texttt{Etoiles} d'un \texttt{Hotel} doit appartenir à $[0,5]$
+  \item Le champ \texttt{Etoiles} d'un \texttt{Commentaire} doit appartenir à $[0,5]$
 \end{itemize}
 
 \section{Hypothèses}
