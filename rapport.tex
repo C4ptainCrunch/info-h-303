@@ -7,6 +7,7 @@
 \usepackage{ amssymb }
 \usepackage{graphics}
 \usepackage{pdfpages}
+\usepackage{placeins}
 
 \begin{document}
 
@@ -27,27 +28,25 @@
 \setlength{\parskip}{1em}
 \linespread{1.1}
 
-
-% \tableofcontents
-
-% \pagebreak
-
-
 \section{Diagramme entité association}
 \subsection{Diagramme}
-
-Le diagramme se trouve en annexe, page \pageref{diagram}.
-
-\begin{figure}[H]
-    \includegraphics[angle=90, scale=0.6]{EA.pdf}
+\begin{figure}[h]
+    \includegraphics[scale=0.40]{EA.pdf}
     \caption{Diagramme Entité-Association}
     \label{diagram}
 \end{figure}
+\FloatBarrier
+
 \subsection{Contraintes}
+
 Les contraintes sont les suivantes :
 \begin{itemize}
-  \item ...
+  \item L'\texttt{UtilisateurId} d'un \texttt{Etablissement} ne peut référencer qu'un \texttt{Utilisateur} dont le champ \texttt{EstAdministrateur} est vrai.
+  \item La \texttt{Latitude} (respectivement \texttt{Longitude}) d'un \texttt{Etablissement} doit appartenir à l'intervalte $[-90, 90]$ (respectivement $[-180, 180]$)
+  \item Le champ \texttt{Etoiles} d'un \texttt{Hotel} doit appartenir à $[0,5]$
+  \item Le champ \texttt{Etoiles} d'un \texttt{Commentaire} doit appartenir à $[0,5]$
 \end{itemize}
+
 
 
 
@@ -146,16 +145,6 @@ Les contraintes sont les suivantes :
     \end{itemize}
 
 \end{description}
-
-\subsection{Contraintes}
-
-Les contraintes sont les suivantes :
-\begin{itemize}
-  \item L'\texttt{UtilisateurId} d'un \texttt{Etablissement} ne peut référencer qu'un \texttt{Utilisateur} dont le champ \texttt{EstAdministrateur} est vrai.
-  \item La \texttt{Latitude} (respectivement \texttt{Longitude}) d'un \texttt{Etablissement} doit appartenir à l'intervalte $[-90, 90]$ (respectivement $[-180, 180]$)
-  \item Le champ \texttt{Etoiles} d'un \texttt{Hotel} doit appartenir à $[0,5]$
-  \item Le champ \texttt{Etoiles} d'un \texttt{Commentaire} doit appartenir à $[0,5]$
-\end{itemize}
 
 \section{Hypothèses}
 
