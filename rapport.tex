@@ -128,7 +128,7 @@ Les contraintes sont les suivantes :
     \begin{itemize}
         \item Commentaire.EtablissementId référence Etablissement.Id
         \item Commentaire.UtilisateurId référence Utilisateur.Id
-        \item (Id, EtablissementId, UtilisateurId, Date) est unique
+        \item (EtablissementId, UtilisateurId, Date) est unique
     \end{itemize}
 
 \item[Label](
@@ -145,7 +145,7 @@ Les contraintes sont les suivantes :
         \item LabelEtablissement.EtablissementId référence Etablissement.Id
         \item LabelEtablissement.UtilisateurId référence Utilisateur.Id
         \item LabelEtablissement.LabelId référence Label.Id
-        \item (Id, EtablissementId, UtilisateurId, LabelId) est unique
+        \item (EtablissementId, UtilisateurId, LabelId) est unique
     \end{itemize}
 
 \end{description}
