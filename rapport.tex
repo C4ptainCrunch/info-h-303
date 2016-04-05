@@ -42,10 +42,12 @@
 
 Les contraintes sont les suivantes :
 \begin{itemize}
-  \item L'\texttt{UtilisateurId} d'un \texttt{Etablissement} ne peut référencer qu'un \texttt{Utilisateur} dont le champ \texttt{EstAdministrateur} est vrai.
-  \item La \texttt{Latitude} (respectivement \texttt{Longitude}) d'un \texttt{Etablissement} doit appartenir à l'intervalte $[-90, 90]$ (respectivement $[-180, 180]$)
-  \item Le champ \texttt{Etoiles} d'un \texttt{Hotel} doit appartenir à $[0,5]$
-  \item Le champ \texttt{Etoiles} d'un \texttt{Commentaire} doit appartenir à $[0,5]$
+  \item L'\textit{UtilisateurId} d'un \textit{Etablissement} ne peut référencer qu'un \textit{Utilisateur} dont le champ \textit{EstAdministrateur} est vrai.
+  \item La \textit{DateCretation} d'un \textit{Etablissement} doit être surpérieure à la \textit{DateCretation} de l'\textit{Utilisateur} qui l'a créé.
+  \item La \textit{Latitude} (respectivement \textit{Longitude}) d'un \textit{Etablissement} doit appartenir à l'intervalte $[-90, 90]$ (respectivement $[-180, 180]$)
+  \item Le champ \textit{Etoiles} d'un \textit{Hotel} doit appartenir à $[0,5]$
+  \item Le champ \textit{Etoiles} d'un \textit{Commentaire} doit appartenir à $[0,5]$
+
 \end{itemize}
 
 
@@ -74,6 +76,7 @@ Les contraintes sont les suivantes :
     Localite,
     Latitude,
     Longitude,
+    DateCretation
     UtilisateurId)
 
     \begin{itemize}
@@ -147,17 +150,10 @@ Les contraintes sont les suivantes :
 
 \end{description}
 
-\section{Hypothèses}
+\section{Remarques}
 
-...
+Nous avons considéré que deux utilistateurs ne peuvent avoir la même adresse email; l'adresse email d'un \textit{Utilisateur} doit donc être unique.
 
-\section{Justification}
-
-Afin d'éviter la redondance et de garantir la cohérence du modèle, nous avons choisis de :
-\begin{itemize}
-  \item ...
-\end{itemize}
-En effet, ...
 
 
 
