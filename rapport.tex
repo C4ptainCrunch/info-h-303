@@ -67,6 +67,7 @@ Les contraintes sont les suivantes :
 
 \item[Etablissement](
     \underline{Id},
+    Type,
     Nom,
     Telephone,
     \textit{SiteWeb},
@@ -80,6 +81,7 @@ Les contraintes sont les suivantes :
     UtilisateurId)
 
     \begin{itemize}
+        \item Etablissement.Type est une énumération de (Hotel, Bar, Restaurant)
         \item Etablissement.UtilisateurId référence Utilisateur.Id
     \end{itemize}
 
