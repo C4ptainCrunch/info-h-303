@@ -23,13 +23,13 @@ CREATE TABLE "etablissement" (
   "phone" VARCHAR(20) NOT NULL,
   "url" TEXT,
   --- address
-    "address_street" VARCHAR(254),
-    "address_number" INTEGER CHECK ("address_number" > 0),
-    "address_zip" INTEGER CHECK ("address_zip" > 0),
-    "address_city" VARCHAR(254),
+    "address_street" VARCHAR(254) NOT NULL,
+    "address_number" INTEGER NOT NULL CHECK ("address_number" > 0),
+    "address_zip" INTEGER NOT NULL CHECK ("address_zip" > 0),
+    "address_city" VARCHAR(254) NOT NULL,
   --- gps
-    "latitude" NUMERIC(9, 6) CHECK("latitude" BETWEEN -180 AND 180),
-    "longitude" NUMERIC(9, 6) CHECK("longitude" BETWEEN -180 AND 180),
+    "latitude" NUMERIC(9, 6) NOT NULL CHECK("latitude" BETWEEN -180 AND 180),
+    "longitude" NUMERIC(9, 6) NOT NULL CHECK("longitude" BETWEEN -180 AND 180),
   "created" DATE NOT NULL, -- creation > user.creation
   "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE RESTRICT,
   "type" etablissement_type NOT NULL,
