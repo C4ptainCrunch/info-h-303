@@ -32,8 +32,8 @@ CREATE TABLE "etablissement" (
     "longitude" NUMERIC(9, 6) CHECK("longitude" BETWEEN -180 AND 180),
   "created" DATE NOT NULL, -- creation > user.creation
   "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE RESTRICT,
-  "type" etablissement_type NOT NULL
-  "picture" VARCHAR(100),
+  "type" etablissement_type NOT NULL,
+  "picture" VARCHAR(100)
 );
 
 CREATE TABLE "hotel" (
