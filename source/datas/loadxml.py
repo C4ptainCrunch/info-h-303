@@ -115,6 +115,17 @@ def createRestaurant(resto):
     res = cursor.fetchone()[0]
     return res
 
+def createHotel(hotel):
+    etablissement_id = createEtablissement(hotel, "hotel")
+    stars = int(resto.Informations.Stars.get_text())
+    rooms = int(resto.Informations.Rooms["number"])
+    price = int(resto.Informations.Price.get_text())
+
+    sql = """INSERT INTO "hotel" (etablissement_id,stars,rooms,price) VALUES (%s,%s,%s%s) RETURNING etablissement_id"""
+    cursor.execute(sql, [etablissement_id, stars, rooms, price])
+    res = cursor.fetchone()[0]
+    return res
+
 # Resto
 f = open("Restaurants.xml", "r")
 xml = f.read()
