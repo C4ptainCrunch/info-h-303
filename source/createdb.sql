@@ -24,7 +24,7 @@ CREATE TABLE "etablissement" (
   "url" TEXT,
   --- address
     "address_street" VARCHAR(254) NOT NULL,
-    "address_number" INTEGER NOT NULL CHECK ("address_number" > 0),
+    "address_number" VARCHAR(5) NOT NULL,
     "address_zip" INTEGER NOT NULL CHECK ("address_zip" > 0),
     "address_city" VARCHAR(254) NOT NULL,
   --- gps
@@ -65,7 +65,7 @@ CREATE TABLE "comment" (
   "date" DATE NOT NULL, -- check > etablissement.date AND > user.date
   "score" INTEGER NOT NULL CHECK ("score" BETWEEN 0 AND 5),
   "text" TEXT NOT NULL,
-  UNIQUE ("date", "user_id")
+  UNIQUE ("date", "user_id", "etablissement_id")
 );
 
 
