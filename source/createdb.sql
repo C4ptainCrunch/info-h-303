@@ -17,6 +17,13 @@ CREATE TABLE "user" (
   "is_admin" BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+CREATE TABLE "session" (
+  "id" SERIAL PRIMARY KEY,
+  "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE CASCADE,
+  "cookie" VARCHAR(128) NOT NULL UNIQUE,
+  "created" TIMESTAMP NOT NULL
+);
+
 CREATE TABLE "etablissement" (
   "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(254) NOT NULL,
