@@ -17,3 +17,22 @@ class User(RawModel):
 
     def __str__(self):
         return self.username
+
+    def is_authenticated(self):
+        return True
+
+class AnonymousUser:
+    def is_authenticated(self):
+        return False
+
+class Session(RawModel):
+    user = models.ForeignKey('users.User', models.CASCADE)
+    cookie = models.CharField(unique=True, max_length=128)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'session'
+
+    def __str__(self):
+        return "session for %s" % self.user
