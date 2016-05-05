@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from etablissements.models import Etablissement
 
-# Create your views here.
+def list_etablissements(request):
+    context = {"bars" : [Etablissement(name="Bastoche"), Etablissement(name="Tavernier")]}
+    return render(request, "etablissements_list.html", context)
