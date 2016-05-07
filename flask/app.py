@@ -54,7 +54,7 @@ def add_hotel():
 
     return render_template('add_hotel.html', form=form)
 
-@app.route("/hotels/<etablissement_id>")
+@app.route("/hotels/<int:etablissement_id>")
 def show_hotel(etablissement_id):
     query = """
     SELECT {}, {}, {} FROM hotel
