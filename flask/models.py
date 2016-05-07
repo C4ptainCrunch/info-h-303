@@ -109,6 +109,25 @@ class Etablissement(Model):
         self.type = type
         self.picture = picture
 
+    @classmethod
+    def from_form(klass, form, user_id, type):
+        instance = klass(
+            name=form.name.data,
+            phone=form.phone.data,
+            url=form.url.data,
+            address_street=form.street.data,
+            address_number=form.number.data,
+            address_city=form.city.data,
+            address_zip=form.zip.data,
+            latitude=form.latitude.data,
+            longitude=form.longitude.data,
+            created=datetime.now(),
+            user_id=user_id,
+            type=type,
+            picture=form.image.data,
+        )
+        return instance
+
 
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]

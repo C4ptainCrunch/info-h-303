@@ -39,21 +39,7 @@ def hello():
 def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():
-        etablissement = models.Etablissement(
-            name=form.name.data,
-            phone=form.phone.data,
-            url=form.url.data,
-            address_street=form.street.data,
-            address_number=form.number.data,
-            address_city=form.city.data,
-            address_zip=form.zip.data,
-            latitude=form.latitude.data,
-            longitude=form.longitude.data,
-            created=datetime.now(),
-            user_id=1,
-            type='hotel',
-            picture=form.image.data,
-        )
+        etablissement = models.Etablissement.from_form(form, 1, "hotel")
         etablissement.insert(g.cursor)
 
         hotel = models.Hotel(
