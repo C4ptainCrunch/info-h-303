@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g
+from flask import Flask, render_template, request, g, redirect, url_for
 import psycopg2
 import psycopg2.extras
 from flask_bootstrap import Bootstrap
@@ -50,9 +50,23 @@ def add_hotel():
         )
         hotel.insert(g.cursor)
 
-        return hotel.id
+        return redirect(url_for('show_hotel', etablissement_id=etablissement.id))
 
     return render_template('add_hotel.html', form=form)
+
+@app.route("/hotels/<etablissement_id>")
+def show_hotel(etablissement_id):
+    query = """
+    SELECT {}, {}, {} FROM hotel
+    JOIN etablissement ON hotel.etablissement_id = etablissement.id
+    JOIN users ON etablissement.user_id = users.id
+    WHERE hotel.etablissement_id=%s
+    """.format(models.Etablissement.star(), models.User.star(), models.Hotel.star())
+
+    g.cursor.execute(query, [etablissement_id])
+    hotel = models.Hotel.from_dict(g.cursor.fetchone())
+
+    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
 
 
 if __name__ == "__main__":
