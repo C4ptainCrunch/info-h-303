@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Model:
 
     def tablename(self):
@@ -74,6 +76,12 @@ class User(Model):
     def __init__(self, id=None, username=None, email=None, password=None, created=None, is_admin=False):
         self.id = int(id) if id is not None else None
         self.username = username
+        self.email = email
+        self.password = password
+        if self.created is None:
+            self.created = datetime.now()
+        self.created = created
+        self.is_admin = is_admin
 
 
     class Meta:
@@ -88,6 +96,18 @@ class Etablissement(Model):
     def __init__(self, id=None, name=None, phone=None, url=None, address_street=None, address_number=None, address_city=None, address_zip=None, latitude=None, longitude=None, created=None, user_id=None, type=None, picture=None):
         self.id = int(id) if id is not None else None
         self.name = name
+        self.phone = phone
+        self.url = url
+        self.address_street = address_street
+        self.address_number = address_number
+        self.address_city = address_city
+        self.address_zip = address_zip
+        self.latitude = latitude
+        self.longitude = longitude
+        self.created = created
+        self.user_id = user_id
+        self.type = type
+        self.picture = picture
 
 
     class Meta:
@@ -99,8 +119,10 @@ class Etablissement(Model):
 
 class Hotel(Model):
     def __init__(self, etablissement_id=None, stars=None, rooms=None, price=None):
-        pass
-
+        self.etablissement_id = etablissement_id
+        self.stars = stars
+        self.rooms = rooms
+        self.price = price
 
     class Meta:
         fields = ["etablissement_id", "stars", "rooms", "price"]
@@ -112,8 +134,9 @@ class Hotel(Model):
 
 class Bar(Model):
     def __init__(self, etablissement_id=None, smoker=None, food=None):
+        self.etablissement_id = etablissement_id
         self.smoker = smoker
-
+        self.food = food
 
     class Meta:
         fields = ["etablissement_id","smoker","food",]
@@ -125,7 +148,12 @@ class Bar(Model):
 
 class Restaurant(Model):
     def __init__(self, etablissement_id=None, price_range=None, max_seats=None, takeaway=False, delivery=None, openings=None):
-        pass
+        self.etablissement_id = etablissement_id
+        self.price_range = price_range
+        self.max_seats = max_seats
+        self.takeaway = takeaway
+        self.delivery = delivery
+        self.openings = openings
 
     class Meta:
         fields = ["etablissement_id", "price_range", "max_seats", "takeaway", "delivery", "openings"]

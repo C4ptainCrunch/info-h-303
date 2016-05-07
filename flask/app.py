@@ -4,6 +4,8 @@ import psycopg2.extras
 from flask_bootstrap import Bootstrap
 import forms
 import config
+import models
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -37,8 +39,32 @@ def hello():
 def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():
-        return redirect(url_for('login'))
-        pass # insert
+        etablissement = models.Etablissement(
+            name=form.name.data,
+            phone=form.phone.data,
+            url=form.url.data,
+            address_street=form.street.data,
+            address_number=form.number.data,
+            address_city=form.city.data,
+            address_zip=form.zip.data,
+            latitude=form.latitude.data,
+            longitude=form.longitude.data,
+            created=datetime.now(),
+            user_id=1,
+            type='hotel',
+            picture=form.image.data,
+        )
+        etablissement.insert(g.cursor)
+
+        hotel = models.Hotel(
+            etablissement_id=etablissement.id,
+            stars=form.stars.data,
+            rooms=form.rooms.data,
+            price=form.price.data
+        )
+        hotel.insert(g.cursor)
+
+        return hotel.id
 
     return render_template('add_hotel.html', form=form)
 
