@@ -11,9 +11,11 @@
 
 {% block scripts %}
 <script>
-    var map = L.map('homemap').setView([50.83906, 4.35308], 13);
+    var map = L.map('homemap', { zoomControl: false }).setView([50.83906, 4.35308], 13);
 
-    L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q", {
+    var url = "https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q";
+
+    L.tileLayer(url, {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
