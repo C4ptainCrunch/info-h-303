@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash, jsonify, json, Response
+from functools import wraps
 import psycopg2
 import psycopg2.extras
 from flask_bootstrap import Bootstrap
@@ -43,6 +44,7 @@ def close_db(exception):
         db.close()
 
 def auth_required(fn):
+    @wraps(fn)
     def outer(*args, **kwargs):
         if g.user.is_authenticated():
             return fn(*args, **kwargs)
@@ -51,6 +53,7 @@ def auth_required(fn):
     return outer
 
 def admin_required(fn):
+    @wraps(fn)
     def outer(*args, **kwargs):
         if g.user.is_admin:
             return fn(*args, **kwargs)
@@ -229,6 +232,7 @@ def random():
     return redirect("/{}s/{}".format(row['type'], row['id']))
 
 @app.route("/delete/<int:etablissement_id>")
+@admin_required
 def delete(etablissement_id):
     query = "DELETE FROM etablissement WHERE id=%s"
     g.cursor.execute(query, [etablissement_id])
