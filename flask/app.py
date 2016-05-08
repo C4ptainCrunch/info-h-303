@@ -70,7 +70,7 @@ def index():
     print(etablissements)
 
     # raise g.user
-    return render_template('index.html')
+    return render_template('index.html', top5=etablissements[:5])
 
 
 @app.route("/login", methods=['GET', 'POST'])

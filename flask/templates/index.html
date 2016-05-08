@@ -7,6 +7,9 @@
 
 <div class="top-5">
 <h1>Notre top 5</h1>
+{% for e in top5 %}
+{{e[0].name}}</br>
+{% endfor %}
 </div>
 
 {% endblock %}
