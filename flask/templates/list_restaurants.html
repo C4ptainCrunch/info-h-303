@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+
+{% for elem in etablissements %}
+{% set restaurant = elem[0] %}
+{% set e = restaurant.etablissement %}
+<h1>{{e.name}} <small>par {{e.user.username}}</small></h1>
+{{restaurant.openings}}
+{{elem[1]}}
+{% endfor %}
+
+{% endblock %}
