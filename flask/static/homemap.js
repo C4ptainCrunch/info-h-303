@@ -10,7 +10,7 @@ if(navigator.geolocation) {
   function displayPos(position) {
     var lat = position.coords.latitude;
     var lon = position.coords.longitude;
-    map.setView([lat,lon], 15);
+    map.setView([lat,lon], 14);
   }
   navigator.geolocation.getCurrentPosition(displayPos,function(){});
 }
