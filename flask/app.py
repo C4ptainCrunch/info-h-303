@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, redirect, url_for
+from flask import Flask, render_template, request, g, redirect, url_for, session, abort
 import psycopg2
 import psycopg2.extras
 from flask_bootstrap import Bootstrap
@@ -17,12 +17,22 @@ def connect_db():
     return conn
 
 @app.before_request
-def before_request():
+def open_db():
     g.db = connect_db()
     g.cursor = g.db.cursor()
 
+@app.before_request
+def get_user_cookie():
+    if "user_id" in session:
+        query = "SELECT * FROM users WHERE id=%s"
+        g.cursor.execute(query, [session['user_id']])
+        user = models.User.from_dict(g.cursor.fetchone())
+        g.user = user
+    else:
+        g.user = models.AnonymousUser()
+
 @app.teardown_request
-def teardown_request(exception):
+def close_db(exception):
     cursor = getattr(g, 'cursor', None)
     if cursor is not None:
         cursor.close()
@@ -31,11 +41,24 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+def auth_required(fn):
+    def outer(*args, **kwargs):
+        if g.user.is_authenticated():
+            return fn(*args, **kwargs)
+        else:
+            return abort(403)
+    return outer
+
+@app.errorhandler(403)
+def page_not_found(e):
+    return render_template('403.html'), 403
+
 @app.route("/")
 def hello():
     return render_template('index.html')
 
 @app.route("/hotels/add", methods=['GET', 'POST'])
+@auth_required
 def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():

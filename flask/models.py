@@ -83,6 +83,8 @@ class User(Model):
         self.created = created
         self.is_admin = is_admin
 
+    def is_authenticated(self):
+        return True
 
     class Meta:
         fields = ['id', "username", "email", "password", "created", "is_admin"]
@@ -90,6 +92,11 @@ class User(Model):
         pk = 'id'
         table = 'users'
         foreign_models = []
+
+
+class AnonymousUser:
+    def is_authenticated(self):
+        return False
 
 
 class Etablissement(Model):
