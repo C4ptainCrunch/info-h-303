@@ -15,6 +15,7 @@ if(navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(displayPos,function(){});
 }
 
+var markers = new L.MarkerClusterGroup();
 
 
 $.ajax({
@@ -23,8 +24,11 @@ $.ajax({
     success: function(res) {
         res.forEach(function(elem){
             var m = L.marker([elem.lat, elem.lon]);
-            m.addTo(map);
             m.bindPopup(elem.name);
+
+            markers.addLayer(m);
         });
     }
 });
+
+map.addLayer(markers);
