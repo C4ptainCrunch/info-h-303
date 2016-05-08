@@ -146,7 +146,8 @@ def show_hotel(etablissement_id):
     data = g.cursor.fetchone()
     if not data:
         return  abort(404)
-    hotel = models.Hotel.from_dict()
+
+    hotel = models.Hotel.from_dict(data)
 
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
 
