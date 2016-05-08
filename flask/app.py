@@ -52,7 +52,7 @@ def auth_required(fn):
 
 def admin_required(fn):
     def outer(*args, **kwargs):
-        if g.user.is_authenticated() and g.user.is_admin:
+        if g.user.is_admin:
             return fn(*args, **kwargs)
         else:
             return abort(403)
