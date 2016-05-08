@@ -196,19 +196,18 @@ def search():
     query = "SELECT * FROM etablissement WHERE SIMILARITY(name, %s) > 0.07 ORDER BY SIMILARITY(name, %s) DESC"
     s = s.strip()
     g.cursor.execute(query, [s,s])
-    rows = g.cursor.fetchall()
-    results = []
-    for row in rows:
-        results.append(models.Etablissement.from_dict(row))
-    j = {
-        "center": [
-            float(statistics.mean([r.latitude for r in results])),
-            float(statistics.mean([r.longitude for r in results])),
-        ],
-        "points": [r.to_marker() for r in results]
-    }
+    results = [models.Etablissement.from_dict(row) for row in g.cursor.fetchall()]
+    js = {}
+    if results:
+        js = {
+            "center": [
+                float(statistics.mean([r.latitude for r in results])),
+                float(statistics.mean([r.longitude for r in results])),
+            ],
+            "points": [r.to_marker() for r in results]
+        }
 
-    return render_template('search.html', term=s, results=results, searchdata=json.dumps(j))
+    return render_template('search.html', term=s, results=results, searchdata=json.dumps(js))
 
 @app.route("/api/etablissemens/all")
 def api_all():
