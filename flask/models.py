@@ -135,6 +135,12 @@ class Etablissement(Model):
         )
         return instance
 
+    def to_marker(self):
+        return {
+            "name": self.name,
+            "lat": float(self.latitude),
+            "lon": float(self.longitude),
+        }
 
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]
