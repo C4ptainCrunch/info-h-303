@@ -3,12 +3,15 @@
 {% block content %}
 
 {% if term %}
-<h1>Votre recherche : {{term}}</h1>
-<p>Votre recherche a retourné {{results|length}} résulats.</p>
+<h1>Votre recherche : {{term}} <small> a retourné {{results|length}} résulats.</small>
+</h1>
 
 <div id="searchmap"></div>
 {% for result in results %}
     <h3>{{result.name}} <small>{{result.phone}}</small></h3>
+{% else %}
+    <h1 class="text-center">Oh non ! Aucun résulat :(</h1>
+    <p class="text-center">Essayez un établissement <a href="/random">au hasard !</a></p>
 {% endfor %}
 
 {% else %}

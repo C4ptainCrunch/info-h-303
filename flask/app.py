@@ -209,6 +209,14 @@ def search():
 
     return render_template('search.html', term=s, results=results, searchdata=json.dumps(js))
 
+@app.route("/random")
+def random():
+    query = "SELECT id, type FROM etablissement ORDER BY RANDOM() LIMIT 1"
+    g.cursor.execute(query)
+    row = g.cursor.fetchone()
+
+    return redirect("/{}s/{}".format(row['type'], row['id']))
+
 @app.route("/api/etablissemens/all")
 def api_all():
     query = "SELECT * FROM etablissement"
