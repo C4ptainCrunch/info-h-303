@@ -99,9 +99,9 @@ def logout():
 
 @app.route("/hotels")
 def list_hotels():
-    query = """select {}, {}, avg(comment.score) as score 
-    from hotel inner join etablissement on hotel.etablissement_id = etablissement.id 
-    left join comment on etablissement.id = comment.etablissement_id 
+    query = """select {}, {}, avg(comment.score) as score
+    from hotel inner join etablissement on hotel.etablissement_id = etablissement.id
+    left join comment on etablissement.id = comment.etablissement_id
     group by etablissement.id, hotel.etablissement_id
     """.format(models.Hotel.star(), models.Etablissement.star())
     g.cursor.execute(query)
@@ -139,11 +139,14 @@ def show_hotel(etablissement_id):
     SELECT {}, {}, {} FROM hotel
     JOIN etablissement ON hotel.etablissement_id = etablissement.id
     JOIN users ON etablissement.user_id = users.id
-    WHERE hotel.etablissement_id=%s
+    WHERE hotel.etablissement_id=%s AND etablissement.type='hotel'
     """.format(models.Etablissement.star(), models.User.star(), models.Hotel.star())
 
     g.cursor.execute(query, [etablissement_id])
-    hotel = models.Hotel.from_dict(g.cursor.fetchone())
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+    hotel = models.Hotel.from_dict()
 
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
 
