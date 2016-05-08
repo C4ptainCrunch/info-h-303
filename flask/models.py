@@ -78,8 +78,8 @@ class User(Model):
         self.username = username
         self.email = email
         self.password = password
-        if self.created is None:
-            self.created = datetime.now()
+        if created is None:
+            created = datetime.now()
         self.created = created
         self.is_admin = is_admin
 

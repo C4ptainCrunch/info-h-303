@@ -18,7 +18,13 @@
           </a>
         </div>
         <div class="collapse navbar-collapse" id=bs-example-navbar-collapse-4>
-          <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
+          {% if g.user.is_authenticated() %}
+            <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">
+              {{g.user.username}}
+            </a></p>
+          {% else %}
+            <p class="navbar-text navbar-right">Login</p>
+          {% endif %}
         </div>
       </div>
     </nav>

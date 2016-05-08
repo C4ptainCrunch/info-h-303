@@ -26,3 +26,9 @@ class Hotel(Etablissement):
     price = IntegerField("Prix d'une chambre double", validators=[validators.NumberRange(min=0)])
 
     submit = SubmitField("Envoyer")
+
+class Login(Form):
+    username = TextField("Nom d'utilisateur")
+    password = TextField('Mot de passe')
+
+    submit = SubmitField("Envoyer")
