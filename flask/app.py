@@ -79,9 +79,7 @@ def index():
         avg = row["score"]
         e = models.Etablissement.from_dict(row)
         etablissements.append((e, avg))
-    print(etablissements)
 
-    # raise g.user
     return render_template('index.html', top5=etablissements[:5])
 
 
