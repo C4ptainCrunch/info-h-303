@@ -97,6 +97,22 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route("/hotels")
+def list_hotels():
+    query = """select {}, {}, avg(comment.score) as score 
+    from hotel inner join etablissement on hotel.etablissement_id = etablissement.id 
+    left join comment on etablissement.id = comment.etablissement_id 
+    group by etablissement.id, hotel.etablissement_id
+    """.format(models.Hotel.star(), models.Etablissement.star())
+    g.cursor.execute(query)
+    rows = g.cursor.fetchall()
+    hotels = []
+    for row in rows:
+        hotel = models.Hotel.from_dict(row)
+        score = row["score"]
+        hotels.append((hotel, score))
+    return render_template("list_hotels.html", etablissements=hotels)
+
 @app.route("/hotels/add", methods=['GET', 'POST'])
 @auth_required
 def add_hotel():

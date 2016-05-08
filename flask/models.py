@@ -150,7 +150,7 @@ class Etablissement(Model):
         foreign_models = [User]
 
 class Hotel(Model):
-    def __init__(self, etablissement_id=None, stars=None, rooms=None, price=None):
+    def __init__(self, etablissement_id=None, stars=None, rooms=None, price=None, *args, **kwargs):
         self.etablissement_id = etablissement_id
         self.stars = stars
         self.rooms = rooms
@@ -165,7 +165,7 @@ class Hotel(Model):
 
 
 class Bar(Model):
-    def __init__(self, etablissement_id=None, smoker=None, food=None):
+    def __init__(self, etablissement_id=None, smoker=None, food=None, *args, **kwargs):
         self.etablissement_id = etablissement_id
         self.smoker = smoker
         self.food = food
@@ -179,7 +179,7 @@ class Bar(Model):
 
 
 class Restaurant(Model):
-    def __init__(self, etablissement_id=None, price_range=None, max_seats=None, takeaway=False, delivery=None, openings=None):
+    def __init__(self, etablissement_id=None, price_range=None, max_seats=None, takeaway=False, delivery=None, openings=None, *args, **kwargs):
         self.etablissement_id = etablissement_id
         self.price_range = price_range
         self.max_seats = max_seats
