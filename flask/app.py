@@ -115,6 +115,7 @@ def list_hotels():
     from hotel inner join etablissement on hotel.etablissement_id = etablissement.id
     left join comment on etablissement.id = comment.etablissement_id
     group by etablissement.id, hotel.etablissement_id
+    ORDER BY score DESC NULLS LAST
     """.format(models.Hotel.star(), models.Etablissement.star())
     g.cursor.execute(query)
     rows = g.cursor.fetchall()
@@ -163,6 +164,23 @@ def show_hotel(etablissement_id):
 
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
 
+@app.route("/bars")
+def list_bars():
+    query = """select {}, {}, avg(comment.score) as score
+    from bar inner join etablissement on bar.etablissement_id = etablissement.id
+    left join comment on etablissement.id = comment.etablissement_id
+    group by etablissement.id, bar.etablissement_id
+    ORDER BY score DESC NULLS LAST
+    """.format(models.Bar.star(), models.Etablissement.star())
+    g.cursor.execute(query)
+    rows = g.cursor.fetchall()
+    bars = []
+    for row in rows:
+        bar = models.Bar.from_dict(row)
+        score = row["score"]
+        bars.append((bar, score))
+    return render_template("list_bars.html", etablissements=bars)
+
 @app.route("/bars/<int:etablissement_id>")
 def show_bar(etablissement_id):
     query = """
@@ -180,6 +198,23 @@ def show_bar(etablissement_id):
     bar = models.Bar.from_dict(data)
 
     return render_template('view_bar.html', bar=bar, e=bar.etablissement)
+
+@app.route("/restaurants")
+def list_restaurants():
+    query = """select {}, {}, avg(comment.score) as score
+    from restaurant inner join etablissement on restaurant.etablissement_id = etablissement.id
+    left join comment on etablissement.id = comment.etablissement_id
+    group by etablissement.id, restaurant.etablissement_id
+    ORDER BY score DESC NULLS LAST
+    """.format(models.Restaurant.star(), models.Etablissement.star())
+    g.cursor.execute(query)
+    rows = g.cursor.fetchall()
+    restaurants = []
+    for row in rows:
+        restaurant = models.Restaurant.from_dict(row)
+        score = row["score"]
+        restaurants.append((restaurant, score))
+    return render_template("list_restaurants.html", etablissements=restaurants)
 
 @app.route("/restaurants/<int:etablissement_id>")
 def show_restaurant(etablissement_id):
