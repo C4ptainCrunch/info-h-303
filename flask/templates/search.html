@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Recherche{% endblock %}
+{% block content %}
+
+<h1>Votre recherche : {{term}}</h1>
+<p>Votre recherche a retourné {{results|length}} résulats</p>
+
+
+{% endblock %}

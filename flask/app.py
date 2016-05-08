@@ -122,6 +122,15 @@ def show_hotel(etablissement_id):
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
 
 
+@app.route("/search")
+def search():
+    s = request.args.get("term")
+    if s is None:
+        return redirect(url_for('index'))
+    s = s.strip()
+
+    return render_template('search.html', term=s, results=[])
+
 @app.route("/api/etablissemens/all")
 def api_all():
     query = "SELECT * FROM etablissement"
