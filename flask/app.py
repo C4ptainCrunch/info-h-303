@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash
+from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash, jsonify, json, Response
 import psycopg2
 import psycopg2.extras
 from flask_bootstrap import Bootstrap
@@ -130,6 +130,16 @@ def show_hotel(etablissement_id):
     hotel = models.Hotel.from_dict(g.cursor.fetchone())
 
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
+
+
+@app.route("/api/etablissemens/all")
+def api_all():
+    query = "SELECT * FROM etablissement"
+    g.cursor.execute(query)
+    l = [models.Etablissement.from_dict(e).to_marker() for e in g.cursor.fetchall()]
+    return Response(response=json.dumps(l),
+                    status=200,
+                    mimetype="application/json")
 
 
 if __name__ == "__main__":
