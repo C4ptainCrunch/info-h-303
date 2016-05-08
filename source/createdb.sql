@@ -8,7 +8,7 @@ CREATE TABLE "label" (
   "name" VARCHAR(254) NOT NULL UNIQUE
 );
 
-CREATE TABLE "user" (
+CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "username" VARCHAR(254) NOT NULL UNIQUE,
   "email" VARCHAR(254) NOT NULL UNIQUE,
@@ -19,7 +19,7 @@ CREATE TABLE "user" (
 
 CREATE TABLE "session" (
   "id" SERIAL PRIMARY KEY,
-  "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE CASCADE,
+  "user_id" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
   "cookie" VARCHAR(128) NOT NULL UNIQUE,
   "created" TIMESTAMP NOT NULL
 );
@@ -38,7 +38,7 @@ CREATE TABLE "etablissement" (
     "latitude" NUMERIC(9, 6) NOT NULL CHECK("latitude" BETWEEN -180 AND 180),
     "longitude" NUMERIC(9, 6) NOT NULL CHECK("longitude" BETWEEN -180 AND 180),
   "created" DATE NOT NULL, -- creation > user.creation
-  "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE RESTRICT,
+  "user_id" INTEGER NOT NULL REFERENCES "users" ON DELETE RESTRICT,
   "type" etablissement_type NOT NULL,
   "picture" VARCHAR(100)
 );
@@ -67,7 +67,7 @@ CREATE TABLE "bar" (
 
 CREATE TABLE "comment" (
   "id" SERIAL PRIMARY KEY,
-  "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE CASCADE,
+  "user_id" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
   "etablissement_id" INTEGER NOT NULL REFERENCES "etablissement" ON DELETE CASCADE,
   "date" DATE NOT NULL, -- check > etablissement.date AND > user.date
   "score" INTEGER NOT NULL CHECK ("score" BETWEEN 0 AND 5),
@@ -79,7 +79,7 @@ CREATE TABLE "comment" (
 CREATE TABLE "etablissement_label" (
   "id" SERIAL PRIMARY KEY,
   "etablissement_id" INTEGER NOT NULL REFERENCES "etablissement" ON DELETE CASCADE,
-  "user_id" INTEGER NOT NULL REFERENCES "user" ON DELETE CASCADE,
+  "user_id" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
   "label_id" INTEGER NOT NULL REFERENCES "label" ON DELETE CASCADE,
   UNIQUE ("etablissement_id", "user_id", "label_id")
 );

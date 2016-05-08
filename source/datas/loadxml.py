@@ -10,12 +10,12 @@ def createUser(username, admin=False):
     email = username + "@ulb.ac.be"
     password = username
     created = datetime.datetime.now()
-    sql = """INSERT INTO "user" (username,email,password,created,is_admin) VALUES (%s,%s,%s,%s,%s) RETURNING id"""
-    cursor.execute("""SELECT * FROM "user" WHERE username=%s""", [username])
+    sql = """INSERT INTO "users" (username,email,password,created,is_admin) VALUES (%s,%s,%s,%s,%s) RETURNING id"""
+    cursor.execute("""SELECT * FROM "users" WHERE username=%s""", [username])
     res = cursor.fetchone()
     if res:
         if admin:
-            cursor.execute("""UPDATE "user" SET is_admin=%s WHERE id=%s""", [True, res[0]])
+            cursor.execute("""UPDATE "users" SET is_admin=%s WHERE id=%s""", [True, res[0]])
         return res[0]
     cursor.execute(sql,[username, email, password, created, admin])
     res = cursor.fetchone()[0]

@@ -1,14 +1,14 @@
 -- R1:
-select * from "user" where id in (select user_id from comment where etablissement_id in (SELECT etablissement_id FROM comment WHERE user_id=(SELECT id FROM "user" WHERE username='Brenda') and score > 3) and score > 3 GROUP BY user_id HAVING COUNT(*) >= 3);
+select * from users where id in (select user_id from comment where etablissement_id in (SELECT etablissement_id FROM comment WHERE user_id=(SELECT id FROM users WHERE username='Brenda') and score > 3) and score > 3 GROUP BY user_id HAVING COUNT(*) >= 3);
 
 -- R2:
-select u.* from etablissement join comment on etablissement.id = comment.etablissement_id join "user" on comment.user_id = "user".id join comment as c on etablissement.id = c.etablissement_id join "user" as u on c.user_id = u.id where "user".username = 'Brenda' and comment.score >= 4 and u.username != 'Brenda' group by u.id having bool_and (c.score >= 4);
+select u.* from etablissement join comment on etablissement.id = comment.etablissement_id join users on comment.user_id = users.id join comment as c on etablissement.id = c.etablissement_id join users as u on c.user_id = u.id where users.username = 'Brenda' and comment.score >= 4 and u.username != 'Brenda' group by u.id having bool_and (c.score >= 4);
 
 -- R3
 select etablissement.* from etablissement left join comment on etablissement.id = comment.etablissement_id GROUP BY etablissement.id HAVING COUNT(*) <= 1;
 
 -- R4:
-select "user".* from "user" where "user".id in (select etablissement.user_id from etablissement left join comment on etablissement.id = comment.etablissement_id group by etablissement.id having bool_and(comment.user_id is NULL or comment.user_id != etablissement.user_id) order by etablissement.id);
+select users.* from users where users.id in (select etablissement.user_id from etablissement left join comment on etablissement.id = comment.etablissement_id group by etablissement.id having bool_and(comment.user_id is NULL or comment.user_id != etablissement.user_id) order by etablissement.id);
 
 -- R5:
 select etablissement.* from etablissement join comment on etablissement.id = comment.etablissement_id GROUP BY etablissement.id HAVING COUNT(*) >=3 ORDER BY avg(score);
