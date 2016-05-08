@@ -53,6 +53,10 @@ def auth_required(fn):
 def page_not_found(e):
     return render_template('403.html'), 403
 
+@app.context_processor
+def inject_user():
+    return dict(user=g.user)
+
 @app.route("/")
 def index():
     # raise g.user

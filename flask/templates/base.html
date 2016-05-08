@@ -18,9 +18,9 @@
           </a>
         </div>
         <div class="collapse navbar-collapse" id=bs-example-navbar-collapse-4>
-          {% if g.user.is_authenticated() %}
+          {% if user.is_authenticated() %}
             <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">
-              {{g.user.username}}
+              {{user.username}}
             </a></p>
           {% else %}
             <p class="navbar-text navbar-right">Login</p>
