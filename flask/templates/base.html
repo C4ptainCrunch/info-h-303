@@ -8,6 +8,8 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+
     <link href="/static/style.css" rel="stylesheet">
 
   </head>
@@ -27,8 +29,11 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated() %}
-              <li><a href="#">
-                {{user.username}}
+              <li><a href="/users/{{user.id}}">
+                <i class="fa fa-user"></i> {{user.username}}
+              </a></li>
+              <li><a href="/logout">
+                <i class="fa fa-sign-out" ></i> Déconnexion
               </a></li>
             {% else %}
               <a class="btn btn-default navbar-btn login-button" href="/login">Se connecter</a>
