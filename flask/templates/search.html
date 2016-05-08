@@ -7,6 +7,9 @@
 
 <div id="searchmap"></div>
 
+{% for e in results %}
+<h2>{{e.name}}</h2>
+{% endfor %}
 
 <script>
     var searchdata = {{searchdata|safe}};

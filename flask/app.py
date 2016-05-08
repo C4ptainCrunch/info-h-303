@@ -192,7 +192,7 @@ def search():
     s = request.args.get("term")
     if s is None:
         return redirect(url_for('index'))
-    query = "SELECT * FROM etablissement WHERE SIMILARITY(name, %s) > 0 ORDER BY SIMILARITY(name, %s) DESC"
+    query = "SELECT * FROM etablissement WHERE SIMILARITY(name, %s) > 0.07 ORDER BY SIMILARITY(name, %s) DESC"
     s = s.strip()
     g.cursor.execute(query, [s,s])
     rows = g.cursor.fetchall()
