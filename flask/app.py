@@ -92,7 +92,7 @@ def logout():
 def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():
-        etablissement = models.Etablissement.from_form(form, 1, "hotel")
+        etablissement = models.Etablissement.from_form(form, g.user.id, "hotel")
         etablissement.insert(g.cursor)
 
         hotel = models.Hotel(
