@@ -3,6 +3,11 @@
 {% block content %}
 
 <h1>{{e.name}} <small>par {{e.user.username}}</small></h1>
+{% if user.is_admin %}
+        <a href="/delete/{{e.id}}" class="btn btn-danger">Supprimer</a>
+        <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning">Editer</a>
+{% endif %}
+
 {% block speciation %}
 
 {% endblock %}

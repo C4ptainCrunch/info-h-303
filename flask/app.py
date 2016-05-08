@@ -228,6 +228,13 @@ def random():
 
     return redirect("/{}s/{}".format(row['type'], row['id']))
 
+@app.route("/delete/<int:etablissement_id>")
+def delete(etablissement_id):
+    query = "DELETE FROM etablissement WHERE id=%s"
+    g.cursor.execute(query, [etablissement_id])
+    return redirect("/")
+
+
 @app.route("/api/etablissemens/all")
 def api_all():
     query = "SELECT * FROM etablissement"
