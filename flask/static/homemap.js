@@ -15,7 +15,7 @@ if(navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(displayPos,function(){});
 }
 
-var markers = new L.MarkerClusterGroup();
+var markers = new L.MarkerClusterGroup({singleMarkerMode: true});
 
 
 $.ajax({
