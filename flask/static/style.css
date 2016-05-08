@@ -20,6 +20,32 @@ body {
     text-decoration: underline;
 }
 
+.login-button {
+    border: 2px solid rgba(255,255,255,0.3);
+    background-color: inherit;
+    color: white;
+    font-weight: 700;
+}
+
+.login-button:hover {
+    border: 2px solid rgba(255,255,255,0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.signup-button {
+    border: 1px solid transparent;
+    background-color: rgb(245, 190, 0);
+    color: white;
+    font-weight: 700;
+}
+
+.signup-button:hover, .signup-button:active, .signup-button:focus {
+    background-color: #f5be00;
+    color: white;
+    border: 1px solid transparent;
+}
+
 
 .navbar-brand {
     color: #ffffff;

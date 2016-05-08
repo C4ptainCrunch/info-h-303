@@ -21,13 +21,18 @@
         </div>
         <div class="collapse navbar-collapse" id=bs-example-navbar-collapse-1>
           <ul class="nav navbar-nav">
-            <li><a href="#">Link</a></li>
+            <li><a href="#">Hotels</a></li>
+            <li><a href="#">Bars</a></li>
+            <li><a href="#">Restaurants</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated() %}
-              <li><a href="#">{{user.username}}</a></li>
+              <li><a href="#">
+                {{user.username}}
+              </a></li>
             {% else %}
-              <li><a href="#">Login</a></li>
+              <a class="btn btn-default navbar-btn login-button" href="/login">Se connecter</a>
+              <a class="btn btn-default navbar-btn signup-button" href="/login">S'inscrire</a>
             {% endif %}
           </ul>
         </div>
