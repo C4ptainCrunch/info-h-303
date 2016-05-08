@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}FourTriangle{% endblock %}</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 
     <link href="/static/style.css" rel="stylesheet">
 
@@ -27,6 +28,14 @@
             <li><a href="#">Bars</a></li>
             <li><a href="#">Restaurants</a></li>
           </ul>
+
+          <form class="navbar-form navbar-left" role="search" method="GET" target="/search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Je cherche...">
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fa fa-search" ></i></button>
+          </form>
+
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated() %}
               <li><a href="/users/{{user.id}}">
@@ -50,5 +59,8 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    {% block scripts %}{% endblock %}
+
   </body>
 </html>

@@ -1,5 +1,6 @@
 body {
     font-family: "Helvetica Neue",Helvetica,Verdana,Arial,sans-serif;
+    background-color: #ECFFFF;
 }
 
 .navbar {
@@ -18,6 +19,10 @@ body {
 .nav > li > a:hover {
     background-color: inherit;
     text-decoration: underline;
+}
+
+.navbar-left input {
+    font-weight: 400;
 }
 
 .login-button {
@@ -56,3 +61,22 @@ body {
 .navbar-brand:hover {
     color: rgba(255,255,255,0.9)
 }
+
+
+h1 {
+    font-weight: bold;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.index-head {
+    font-size: 5em;
+    color: #2d5be3;
+}
+
+.index-sub-head {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: grey;
+}
+
+#homemap { height: 40em; }

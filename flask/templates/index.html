@@ -1,5 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
 {% block content %}
-coucou
+
+<h1 class="text-center index-head">FOURTRIANGLE</h1>
+<h3 class="text-center index-sub-head">La référence en hotels, bars et restaurants en Belgique</h3>
+
+ <div id="homemap"></div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    var map = L.map('homemap').setView([50.83906, 4.35308], 13);
+
+    L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q", {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    if(navigator.geolocation) {
+      function displayPos(position) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        map.setView([lat,lon], 15);
+      }
+      navigator.geolocation.getCurrentPosition(displayPos,function(){});
+    }
+
+    L.marker([51.5, -0.09]).addTo(map)
+</script>
 {% endblock %}
