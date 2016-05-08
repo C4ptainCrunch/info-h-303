@@ -3,7 +3,17 @@
 {% block content %}
 
 <h1>Votre recherche : {{term}}</h1>
-<p>Votre recherche a retourné {{results|length}} résulats</p>
+<p>Votre recherche a retourné {{results|length}} résulats.</p>
+
+<div id="searchmap"></div>
 
 
+<script>
+    var searchdata = {{searchdata|safe}};
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/search.js"></script>
 {% endblock %}

@@ -138,8 +138,11 @@ def search():
     if s is None:
         return redirect(url_for('index'))
     s = s.strip()
+    j = {
+        "center": [10, 10],
+    }
 
-    return render_template('search.html', term=s, results=[])
+    return render_template('search.html', term=s, results=[], searchdata=json.dumps(j))
 
 @app.route("/api/etablissemens/all")
 def api_all():
