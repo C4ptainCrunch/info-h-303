@@ -1,5 +1,6 @@
 CREATE EXTENSION cube;
 CREATE EXTENSION earthdistance;
+CREATE EXTENSION pg_trgm;
 CREATE TYPE etablissement_type AS ENUM ('restaurant', 'hotel', 'bar');
 
 -- Tables
