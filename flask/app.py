@@ -50,6 +50,14 @@ def auth_required(fn):
             return abort(403)
     return outer
 
+def admin_required(fn):
+    def outer(*args, **kwargs):
+        if g.user.is_authenticated() and g.user.is_admin:
+            return fn(*args, **kwargs)
+        else:
+            return abort(403)
+    return outer
+
 @app.errorhandler(403)
 def page_not_found(e):
     return render_template('403.html'), 403
@@ -115,7 +123,7 @@ def list_hotels():
     return render_template("list_hotels.html", etablissements=hotels)
 
 @app.route("/hotels/add", methods=['GET', 'POST'])
-@auth_required
+@admin_required
 def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():
