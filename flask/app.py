@@ -197,6 +197,9 @@ def search():
     s = s.strip()
     g.cursor.execute(query, [s,s])
     results = [models.Etablissement.from_dict(row) for row in g.cursor.fetchall()]
+    if len(results) == 1:
+        e = results[0]
+        return redirect("/{}s/{}".format(e.type, e.id))
     js = {}
     if results:
         js = {
