@@ -100,7 +100,7 @@ class AnonymousUser:
 
 
 class Etablissement(Model):
-    def __init__(self, id=None, name=None, phone=None, url=None, address_street=None, address_number=None, address_city=None, address_zip=None, latitude=None, longitude=None, created=None, user_id=None, type=None, picture=None):
+    def __init__(self, id=None, name=None, phone=None, url=None, address_street=None, address_number=None, address_city=None, address_zip=None, latitude=None, longitude=None, created=None, user_id=None, type=None, picture=None, *args, **kwargs):
         self.id = int(id) if id is not None else None
         self.name = name
         self.phone = phone

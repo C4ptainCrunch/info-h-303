@@ -59,6 +59,16 @@ def inject_user():
 
 @app.route("/")
 def index():
+    query = "SELECT etablissement.*, AVG(comment.score) AS score FROM etablissement LEFT JOIN comment ON etablissement.id = comment.etablissement_id GROUP BY etablissement.id ORDER BY AVG(comment.score) DESC NULLS LAST"
+    g.cursor.execute(query)
+    rows = g.cursor.fetchall()
+    etablissements = []
+    for row in rows:
+        avg = row["score"]
+        e = models.Etablissement.from_dict(row)
+        etablissements.append((e, avg))
+    print(etablissements)
+
     # raise g.user
     return render_template('index.html')
 
