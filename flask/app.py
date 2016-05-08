@@ -151,6 +151,41 @@ def show_hotel(etablissement_id):
 
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
 
+@app.route("/bars/<int:etablissement_id>")
+def show_bar(etablissement_id):
+    query = """
+    SELECT {}, {}, {} FROM bar
+    JOIN etablissement ON bar.etablissement_id = etablissement.id
+    JOIN users ON etablissement.user_id = users.id
+    WHERE bar.etablissement_id=%s AND etablissement.type='bar'
+    """.format(models.Etablissement.star(), models.User.star(), models.Bar.star())
+
+    g.cursor.execute(query, [etablissement_id])
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+
+    bar = models.Bar.from_dict(data)
+
+    return render_template('view_bar.html', bar=bar, e=bar.etablissement)
+
+@app.route("/restaurants/<int:etablissement_id>")
+def show_restaurant(etablissement_id):
+    query = """
+    SELECT {}, {}, {} FROM restaurant
+    JOIN etablissement ON restaurant.etablissement_id = etablissement.id
+    JOIN users ON etablissement.user_id = users.id
+    WHERE restaurant.etablissement_id=%s AND etablissement.type='restaurant'
+    """.format(models.Etablissement.star(), models.User.star(), models.Restaurant.star())
+
+    g.cursor.execute(query, [etablissement_id])
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+
+    restaurant = models.Restaurant.from_dict(data)
+
+    return render_template('view_restaurant.html', restaurant=restaurant, e=restaurant.etablissement)
 
 @app.route("/search")
 def search():
