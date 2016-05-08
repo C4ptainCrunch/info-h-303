@@ -1,0 +1,32 @@
+body {
+    font-family: "Helvetica Neue",Helvetica,Verdana,Arial,sans-serif;
+}
+
+.navbar {
+    background-color: #2d5be3;
+    border-radius: 0;
+    color: #ffffff;
+    border-top: 1.5em solid rgb(7, 50, 162);
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.nav a {
+    color: #fff;
+}
+
+.nav > li > a:hover {
+    background-color: inherit;
+    text-decoration: underline;
+}
+
+
+.navbar-brand {
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.navbar-brand:hover {
+    color: rgba(255,255,255,0.9)
+}

@@ -7,24 +7,29 @@
     <title>{% block title %}{% endblock %}</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:900' rel='stylesheet' type='text/css'>
+    <link href="/static/style.css" rel="stylesheet">
 
   </head>
   <body>
-    <nav class="navbar navbar-default">
+    <nav class="navbar">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">
-            <img alt="FourTriangle" src="...">
+          <a class="navbar-brand" href="/">
+            FOURTRIANGLE
           </a>
         </div>
-        <div class="collapse navbar-collapse" id=bs-example-navbar-collapse-4>
-          {% if user.is_authenticated() %}
-            <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">
-              {{user.username}}
-            </a></p>
-          {% else %}
-            <p class="navbar-text navbar-right">Login</p>
-          {% endif %}
+        <div class="collapse navbar-collapse" id=bs-example-navbar-collapse-1>
+          <ul class="nav navbar-nav">
+            <li><a href="#">Link</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated() %}
+              <li><a href="#">{{user.username}}</a></li>
+            {% else %}
+              <li><a href="#">Login</a></li>
+            {% endif %}
+          </ul>
         </div>
       </div>
     </nav>
