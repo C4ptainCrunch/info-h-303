@@ -101,3 +101,8 @@ h1 {
     padding: 1em;
     border-radius: 2em;
 }
+
+.stars {
+    color: rgb(245, 190, 0);
+    font-weight: 400;
+}

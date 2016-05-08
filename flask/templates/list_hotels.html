@@ -5,9 +5,10 @@
 {% for elem in etablissements %}
 {% set hotel = elem[0] %}
 {% set e = hotel.etablissement %}
+{% set score = elem[1] %}
 <h1>{{e.name}} <small>par {{e.user.username}}</small></h1>
 {{hotel.stars}}
-{{elem[1]}}
+{{score}}
 {% endfor %}
 
 {% endblock %}
