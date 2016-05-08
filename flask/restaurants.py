@@ -28,7 +28,15 @@ def list_restaurants():
         restaurant = models.Restaurant.from_dict(row)
         score = row["score"]
         restaurants.append((restaurant, score))
-    return render_template("list_restaurants.html", etablissements=restaurants)
+
+    day = (datetime.now().isoweekday() - 1)
+    is_supper = datetime.now().hour > 15
+    return render_template(
+        "list_restaurants.html",
+        etablissements=restaurants,
+        day=day,
+        is_supper=is_supper,
+    )
 
 @restaurants_api.route("/<int:etablissement_id>")
 def show_restaurant(etablissement_id):

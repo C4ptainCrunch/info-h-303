@@ -16,12 +16,25 @@
                     {% endfor %}
                 {% endif %}
             </span>
-            {% if restaurant.openings[1] %}
-                Ouvert pour l'instant
+            {% if is_supper %}
+                {% if restaurant.openings[day * 2 + 1] %}
+                    Ouvert ce soir
+                {% else %}
+                    Fermé pour l'instant
+                {% endif %}
+            {% else %}
+                {% if restaurant.openings[day * 2] and restaurant.openings[day * 2 + 1] %}
+                    Ouvert toute la journée
+                {% elif restaurant.openings[day * 2] %}
+                    Ouvert ce midi
+                {% elif restaurant.openings[day * 2 + 1] %}
+                    Ouvert ce soir
+                {% else %}
+                    Fermé aujourd'hui
+                {% endif %}
             {% endif %}
         </small>
     </h1>
 {% endfor %}
-
 {% endblock %}
 
