@@ -1,3 +1,5 @@
+CREATE EXTENSION cube;
+CREATE EXTENSION earthdistance;
 CREATE TYPE etablissement_type AS ENUM ('restaurant', 'hotel', 'bar');
 
 -- Tables
