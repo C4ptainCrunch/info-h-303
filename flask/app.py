@@ -9,14 +9,16 @@ import models
 from datetime import datetime
 import statistics
 
+from ressources import *
+
+from hotels import hotels_api
+from bars import bars_api
+from restaurants import restaurants_api
+
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
 Bootstrap(app)
 
-def connect_db():
-    conn = psycopg2.connect(config.DB_URL, cursor_factory=psycopg2.extras.DictCursor)
-    conn.autocommit = True
-    return conn
 
 @app.before_request
 def open_db():
@@ -43,24 +45,6 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-def auth_required(fn):
-    @wraps(fn)
-    def outer(*args, **kwargs):
-        if g.user.is_authenticated():
-            return fn(*args, **kwargs)
-        else:
-            return abort(403)
-    return outer
-
-def admin_required(fn):
-    @wraps(fn)
-    def outer(*args, **kwargs):
-        if g.user.is_admin:
-            return fn(*args, **kwargs)
-        else:
-            return abort(403)
-    return outer
-
 @app.errorhandler(403)
 def page_not_found(e):
     return render_template('403.html'), 403
@@ -68,6 +52,10 @@ def page_not_found(e):
 @app.context_processor
 def inject_user():
     return dict(user=g.user)
+
+app.register_blueprint(hotels_api, url_prefix='/hotels')
+app.register_blueprint(bars_api, url_prefix='/bars')
+app.register_blueprint(restaurants_api, url_prefix='/restaurants')
 
 @app.route("/")
 def index():
@@ -106,131 +94,6 @@ def logout():
         del session['user_id']
     return redirect(url_for('index'))
 
-
-@app.route("/hotels")
-def list_hotels():
-    query = """select {}, {}, avg(comment.score) as score
-    from hotel inner join etablissement on hotel.etablissement_id = etablissement.id
-    left join comment on etablissement.id = comment.etablissement_id
-    group by etablissement.id, hotel.etablissement_id
-    ORDER BY score DESC NULLS LAST
-    """.format(models.Hotel.star(), models.Etablissement.star())
-    g.cursor.execute(query)
-    rows = g.cursor.fetchall()
-    hotels = []
-    for row in rows:
-        hotel = models.Hotel.from_dict(row)
-        score = row["score"]
-        hotels.append((hotel, score))
-    return render_template("list_hotels.html", etablissements=hotels)
-
-@app.route("/hotels/add", methods=['GET', 'POST'])
-@admin_required
-def add_hotel():
-    form = forms.Hotel(request.form)
-    if request.method == 'POST' and form.validate():
-        etablissement = models.Etablissement.from_form(form, g.user.id, "hotel")
-        etablissement.insert(g.cursor)
-
-        hotel = models.Hotel(
-            etablissement_id=etablissement.id,
-            stars=form.stars.data,
-            rooms=form.rooms.data,
-            price=form.price.data
-        )
-        hotel.insert(g.cursor)
-
-        return redirect(url_for('show_hotel', etablissement_id=etablissement.id))
-
-    return render_template('add_hotel.html', form=form)
-
-@app.route("/hotels/<int:etablissement_id>")
-def show_hotel(etablissement_id):
-    query = """
-    SELECT {}, {}, {} FROM hotel
-    JOIN etablissement ON hotel.etablissement_id = etablissement.id
-    JOIN users ON etablissement.user_id = users.id
-    WHERE hotel.etablissement_id=%s AND etablissement.type='hotel'
-    """.format(models.Etablissement.star(), models.User.star(), models.Hotel.star())
-
-    g.cursor.execute(query, [etablissement_id])
-    data = g.cursor.fetchone()
-    if not data:
-        return  abort(404)
-
-    hotel = models.Hotel.from_dict(data)
-
-    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
-
-@app.route("/bars")
-def list_bars():
-    query = """select {}, {}, avg(comment.score) as score
-    from bar inner join etablissement on bar.etablissement_id = etablissement.id
-    left join comment on etablissement.id = comment.etablissement_id
-    group by etablissement.id, bar.etablissement_id
-    ORDER BY score DESC NULLS LAST
-    """.format(models.Bar.star(), models.Etablissement.star())
-    g.cursor.execute(query)
-    rows = g.cursor.fetchall()
-    bars = []
-    for row in rows:
-        bar = models.Bar.from_dict(row)
-        score = row["score"]
-        bars.append((bar, score))
-    return render_template("list_bars.html", etablissements=bars)
-
-@app.route("/bars/<int:etablissement_id>")
-def show_bar(etablissement_id):
-    query = """
-    SELECT {}, {}, {} FROM bar
-    JOIN etablissement ON bar.etablissement_id = etablissement.id
-    JOIN users ON etablissement.user_id = users.id
-    WHERE bar.etablissement_id=%s AND etablissement.type='bar'
-    """.format(models.Etablissement.star(), models.User.star(), models.Bar.star())
-
-    g.cursor.execute(query, [etablissement_id])
-    data = g.cursor.fetchone()
-    if not data:
-        return  abort(404)
-
-    bar = models.Bar.from_dict(data)
-
-    return render_template('view_bar.html', bar=bar, e=bar.etablissement)
-
-@app.route("/restaurants")
-def list_restaurants():
-    query = """select {}, {}, avg(comment.score) as score
-    from restaurant inner join etablissement on restaurant.etablissement_id = etablissement.id
-    left join comment on etablissement.id = comment.etablissement_id
-    group by etablissement.id, restaurant.etablissement_id
-    ORDER BY score DESC NULLS LAST
-    """.format(models.Restaurant.star(), models.Etablissement.star())
-    g.cursor.execute(query)
-    rows = g.cursor.fetchall()
-    restaurants = []
-    for row in rows:
-        restaurant = models.Restaurant.from_dict(row)
-        score = row["score"]
-        restaurants.append((restaurant, score))
-    return render_template("list_restaurants.html", etablissements=restaurants)
-
-@app.route("/restaurants/<int:etablissement_id>")
-def show_restaurant(etablissement_id):
-    query = """
-    SELECT {}, {}, {} FROM restaurant
-    JOIN etablissement ON restaurant.etablissement_id = etablissement.id
-    JOIN users ON etablissement.user_id = users.id
-    WHERE restaurant.etablissement_id=%s AND etablissement.type='restaurant'
-    """.format(models.Etablissement.star(), models.User.star(), models.Restaurant.star())
-
-    g.cursor.execute(query, [etablissement_id])
-    data = g.cursor.fetchone()
-    if not data:
-        return  abort(404)
-
-    restaurant = models.Restaurant.from_dict(data)
-
-    return render_template('view_restaurant.html', restaurant=restaurant, e=restaurant.etablissement)
 
 @app.route("/search")
 def search():
