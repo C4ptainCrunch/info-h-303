@@ -6,6 +6,7 @@ import forms
 import config
 import models
 from datetime import datetime
+import statistics
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -200,7 +201,11 @@ def search():
     for row in rows:
         results.append(models.Etablissement.from_dict(row))
     j = {
-        "center": [10, 10],
+        "center": [
+            float(statistics.mean([r.latitude for r in results])),
+            float(statistics.mean([r.longitude for r in results])),
+        ],
+        "points": [r.to_marker() for r in results]
     }
 
     return render_template('search.html', term=s, results=results, searchdata=json.dumps(j))

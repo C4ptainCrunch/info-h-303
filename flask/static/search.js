@@ -8,20 +8,15 @@ L.tileLayer(url, {
 
 map.setView(searchdata.center, 13);
 
-// var markers = new L.MarkerClusterGroup({singleMarkerMode: true});
+var markers = new L.MarkerClusterGroup({singleMarkerMode: true});
 
 
-// $.ajax({
-//     url: "/api/etablissemens/all",
-//     dataType: 'json', // added data type
-//     success: function(res) {
-//         res.forEach(function(elem){
-//             var m = L.marker([elem.lat, elem.lon]);
-//             m.bindPopup(elem.name);
+searchdata.points.forEach(function(elem){
+    var m = L.marker([elem.lat, elem.lon]);
+    m.bindPopup(elem.name);
 
-//             markers.addLayer(m);
-//         });
-//     }
-// });
+    markers.addLayer(m);
+});
 
-// map.addLayer(markers);
+
+map.addLayer(markers);

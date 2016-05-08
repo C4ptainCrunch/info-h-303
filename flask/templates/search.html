@@ -2,11 +2,29 @@
 {% block title %}Recherche{% endblock %}
 {% block content %}
 
+{% if term %}
 <h1>Votre recherche : {{term}}</h1>
 <p>Votre recherche a retourné {{results|length}} résulats.</p>
 
 <div id="searchmap"></div>
+{% for result in results %}
+    <h3>{{result.name}} <small>{{result.phone}}</small></h3>
+{% endfor %}
 
+{% else %}
+<br><br><br><br><br><br><br><br><br><br><br>
+<p class="text-center">FourTriangle vous aide à trouver le meilleur, tout le temps !<p>
+<form class="form-inline text-center">
+  <div class="form-group">
+    <input type="text" class="form-control input-lg" name="term" placeholder="Recherche...">
+  </div>
+  <button type="submit" class="btn btn-success input-lg">Chercher <i class="fa fa-search" ></i></button>
+</form>
+<br>
+<p class="text-muted text-center">Conseil : cherchez deux mots en mettant un + entre les deux.<p>
+
+
+{% endif %}
 
 <script>
     var searchdata = {{searchdata|safe}};
