@@ -17,8 +17,9 @@ users_api = Blueprint('users_api', __name__)
 def login():
     form = forms.Login(request.form)
     if request.method == "POST" and form.validate():
-        query = "SELECT * FROM users WHERE username=%s"
-        g.cursor.execute(query, [form.username.data])
+        query = "SELECT * FROM users WHERE lower(username)=lower(%s) AND password=%s"
+        hashed = form.password.data
+        g.cursor.execute(query, [form.username.data, hashed])
         row = g.cursor.fetchone()
         if row:
             user = models.User.from_dict(row)

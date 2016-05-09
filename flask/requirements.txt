@@ -1,11 +1,7 @@
-Django
 psycopg2
-django-bootstrap3
-Pillow
 lxml
 beautifulsoup4
-django-debug-toolbar
 flask
 flask_bootstrap
 flask_wtf
-
+pbkdf2
