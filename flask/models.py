@@ -1,5 +1,7 @@
 from datetime import datetime
 from flask import g, abort
+from werkzeug import secure_filename
+import os
 
 class Model:
 
@@ -140,7 +142,6 @@ class Etablissement(Model):
             created=datetime.now(),
             user_id=user_id,
             type=type,
-            picture=form.picture.data,
         )
         return instance
 
@@ -150,6 +151,13 @@ class Etablissement(Model):
             "lat": float(self.latitude),
             "lon": float(self.longitude),
         }
+
+    def set_picture(self, form_field, files):
+        image = files[form_field.name]
+        image_data = image.read()
+        secure = secure_filename(image.filename)
+        open('static/media/' + secure, 'wb').write(image_data)
+        self.picture = '/static/media/' + secure
 
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]

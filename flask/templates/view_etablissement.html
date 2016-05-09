@@ -8,6 +8,10 @@
         <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning">Editer</a>
 {% endif %}
 
+{% if e.picture %}
+    <img src="{{e.picture}}" >
+{% endif %}
+
 {% block speciation %}
 
 {% endblock %}

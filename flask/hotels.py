@@ -44,6 +44,7 @@ def add_hotel():
         hotel.etablissement.user_id = g.user.id
         hotel.etablissement.insert(g.cursor)
         hotel.etablissement_id = hotel.etablissement.id
+        hotel.etablissement.set_picture(form.etablissement.picture, request.files)
 
         hotel.insert(g.cursor)
 
@@ -89,9 +90,10 @@ def edit_hotel(etablissement_id):
     form = forms.Hotel(request.form, obj=hotel)
     if request.method == 'POST' and form.validate():
         form.populate_obj(hotel)
+        hotel.etablissement.set_picture(form.etablissement.picture, request.files)
         hotel.etablissement.update(g.cursor)
         hotel.update(g.cursor)
         return redirect(url_for('.show_hotel', etablissement_id=hotel.etablissement.id))
-    
+
 
     return render_template('add_hotel.html', form=form)
