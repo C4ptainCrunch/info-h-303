@@ -154,10 +154,11 @@ class Etablissement(Model):
 
     def set_picture(self, form_field, files):
         image = files[form_field.name]
-        image_data = image.read()
-        secure = secure_filename(image.filename)
-        open('static/media/' + secure, 'wb').write(image_data)
-        self.picture = '/static/media/' + secure
+        if image:
+            image_data = image.read()
+            secure = secure_filename(image.filename)
+            open('static/media/' + secure, 'wb').write(image_data)
+            self.picture = '/static/media/' + secure
 
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]

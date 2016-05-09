@@ -39,6 +39,7 @@ def add_bar():
         bar = models.Bar()
         bar.etablissement = models.Etablissement(created=datetime.now(), type="bar", user_id=g.user.id)
         form.populate_obj(bar)
+        bar.etablissement.set_picture(form.etablissement.picture, request.files)
 
         bar.etablissement.insert(g.cursor)
         bar.etablissement_id = bar.etablissement.id
@@ -76,16 +77,19 @@ def edit_bar(etablissement_id):
     JOIN users ON etablissement.user_id = users.id
     WHERE bar.etablissement_id=%s AND etablissement.type='bar'
     """.format(models.Etablissement.star(), models.User.star(), models.Bar.star())
-    
+
     g.cursor.execute(query, [etablissement_id])
     data = g.cursor.fetchone()
-    bar = models.Bar.from_dict(data)
     if not data:
         return  abort(404)
+    bar = models.Bar.from_dict(data)
+    image = bar.etablissement.picture
 
     form = forms.Bar(request.form, obj=bar)
     if request.method == 'POST' and form.validate():
         form.populate_obj(bar)
+        bar.etablissement.picture = image
+        bar.etablissement.set_picture(form.etablissement.picture, request.files)
         bar.etablissement.update(g.cursor)
         bar.update(g.cursor)
         return redirect(url_for('.show_bar', etablissement_id=bar.etablissement.id))
