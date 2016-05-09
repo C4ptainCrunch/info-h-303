@@ -5,6 +5,6 @@
 
 {# {% from "macros.html" import render_field %} #}
 {% import "bootstrap/wtf.html" as wtf %}
-    {{wtf.quick_form(form,  button_map={"Ok":'default'})}}
+    {{wtf.quick_form(form, enctype="multipart/form-data", button_map={"Ok":'default'})}}
 
 {% endblock %}
