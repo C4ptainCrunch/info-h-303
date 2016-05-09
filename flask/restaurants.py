@@ -38,6 +38,25 @@ def list_restaurants():
         is_supper=is_supper,
     )
 
+@restaurants_api.route("/add", methods=['GET', 'POST'])
+@admin_required
+def add_restaurant():
+    form = forms.Restaurant(request.form)
+    if request.method == 'POST' and form.validate():
+        print(form.openings.data)
+        restaurant = models.Restaurant()
+        restaurant.etablissement = models.Etablissement(created=datetime.now(), type="restaurant", user_id=g.user.id)
+        form.populate_obj(restaurant)
+
+        restaurant.etablissement.insert(g.cursor)
+        restaurant.etablissement_id = restaurant.etablissement.id
+
+        restaurant.insert(g.cursor)
+
+        return redirect(url_for('.show_restaurant', etablissement_id=restaurant.etablissement.id))
+
+    return render_template('add_restaurant.html', form=form)
+
 @restaurants_api.route("/<int:etablissement_id>")
 def show_restaurant(etablissement_id):
     query = """
