@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from flask_wtf.html5 import TelField, URLField, IntegerField, DecimalField
 from flask_wtf.file import FileField
-from wtforms import TextField, TextAreaField, SubmitField, validators
+from wtforms import TextField, TextAreaField, SubmitField, validators, PasswordField
 
 class Etablissement(Form):
     name = TextField('Nom', [validators.Length(min=4, max=254)])
@@ -29,6 +29,6 @@ class Hotel(Etablissement):
 
 class Login(Form):
     username = TextField("Nom d'utilisateur")
-    password = TextField('Mot de passe')
+    password = PasswordField('Mot de passe')
 
     submit = SubmitField("Envoyer")
