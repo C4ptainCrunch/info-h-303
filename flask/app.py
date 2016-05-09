@@ -14,6 +14,7 @@ from ressources import *
 from hotels import hotels_api
 from bars import bars_api
 from restaurants import restaurants_api
+from users import users_api
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -56,6 +57,7 @@ def inject_user():
 app.register_blueprint(hotels_api, url_prefix='/hotels')
 app.register_blueprint(bars_api, url_prefix='/bars')
 app.register_blueprint(restaurants_api, url_prefix='/restaurants')
+app.register_blueprint(users_api, url_prefix='/users')
 
 @app.route("/")
 def index():
@@ -71,39 +73,16 @@ def index():
     return render_template('index.html', top5=etablissements[:5])
 
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    form = forms.Login(request.form)
-    if request.method == "POST" and form.validate():
-        query = "SELECT * FROM users WHERE username=%s"
-        g.cursor.execute(query, [form.username.data])
-        row = g.cursor.fetchone()
-        if row:
-            user = models.User.from_dict(row)
-            session['user_id'] = user.id
-            return redirect(url_for('index'))
-        else:
-            form.username.errors.append("Nom d'utilisateur ou mot de passe invalide")
-            form.password.errors.append("Nom d'utilisateur ou mot de passe invalide")
-
-    return render_template('login.html', form=form)
-
-@app.route("/logout")
-def logout():
-    if "user_id" in session:
-        del session['user_id']
-    return redirect(url_for('index'))
-
-
 @app.route("/search")
 def search():
     s = request.args.get("term")
     if s is None:
         return redirect(url_for('index'))
-    query = "SELECT * FROM etablissement WHERE SIMILARITY(name, %s) > 0.07 ORDER BY SIMILARITY(name, %s) DESC"
     s = s.strip()
-    g.cursor.execute(query, [s,s])
-    results = [models.Etablissement.from_dict(row) for row in g.cursor.fetchall()]
+
+    query = "SELECT * FROM etablissement WHERE SIMILARITY(name, %s) > 0.07 ORDER BY SIMILARITY(name, %s) DESC"
+    results = models.list_of(query, [s,s], models.Etablissement)
+
     if len(results) == 1:
         e = results[0]
         return redirect("/{}s/{}".format(e.type, e.id))
