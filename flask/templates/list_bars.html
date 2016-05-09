@@ -2,6 +2,10 @@
 {% block title %}Nos bars{% endblock %}
 {% block content %}
 
+{% if user.is_admin %}
+        <a href="/bars/add" class="btn btn-success">Ajouter un bar</a>
+{% endif %}
+
 {% for elem in etablissements %}
     {% set bar = elem[0] %}
     {% set e = bar.etablissement %}
