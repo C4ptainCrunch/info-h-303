@@ -126,16 +126,16 @@ class Etablissement(Model):
             name=form.name.data,
             phone=form.phone.data,
             url=form.url.data,
-            address_street=form.street.data,
-            address_number=form.number.data,
-            address_city=form.city.data,
-            address_zip=form.zip.data,
+            address_street=form.address_street.data,
+            address_number=form.address_number.data,
+            address_city=form.address_city.data,
+            address_zip=form.address_zip.data,
             latitude=form.latitude.data,
             longitude=form.longitude.data,
             created=datetime.now(),
             user_id=user_id,
             type=type,
-            picture=form.image.data,
+            picture=form.picture.data,
         )
         return instance
 

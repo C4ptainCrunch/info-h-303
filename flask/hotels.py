@@ -35,18 +35,19 @@ def list_hotels():
 def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():
-        etablissement = models.Etablissement.from_form(form, g.user.id, "hotel")
-        etablissement.insert(g.cursor)
+        hotel = models.Hotel()
+        hotel.etablissement = models.Etablissement()
+        form.populate_obj(hotel)
 
-        hotel = models.Hotel(
-            etablissement_id=etablissement.id,
-            stars=form.stars.data,
-            rooms=form.rooms.data,
-            price=form.price.data
-        )
+        hotel.etablissement.created=datetime.now()
+        hotel.etablissement.type="hotel"
+        hotel.etablissement.user_id = g.user.id
+        hotel.etablissement.insert(g.cursor)
+        hotel.etablissement_id = hotel.etablissement.id
+
         hotel.insert(g.cursor)
 
-        return redirect(url_for('.show_hotel', etablissement_id=etablissement.id))
+        return redirect(url_for('.show_hotel', etablissement_id=hotel.etablissement.id))
 
     return render_template('add_hotel.html', form=form)
 
@@ -67,3 +68,30 @@ def show_hotel(etablissement_id):
     hotel = models.Hotel.from_dict(data)
 
     return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
+
+@hotels_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
+@admin_required
+def edit_hotel(etablissement_id):
+    query = """
+    SELECT {}, {}, {} FROM hotel
+    JOIN etablissement ON hotel.etablissement_id = etablissement.id
+    JOIN users ON etablissement.user_id = users.id
+    WHERE hotel.etablissement_id=%s AND etablissement.type='hotel'
+    """.format(models.Etablissement.star(), models.User.star(), models.Hotel.star())
+
+
+    g.cursor.execute(query, [etablissement_id])
+    data = g.cursor.fetchone()
+    hotel = models.Hotel.from_dict(data)
+    if not data:
+        return  abort(404)
+
+    form = forms.Hotel(request.form, obj=hotel)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(hotel)
+        hotel.etablissement.update(g.cursor)
+        hotel.update(g.cursor)
+        return redirect(url_for('.show_hotel', etablissement_id=hotel.etablissement.id))
+    
+
+    return render_template('add_hotel.html', form=form)
