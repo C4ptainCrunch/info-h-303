@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask import g, abort
 
 class Model:
 
@@ -11,7 +12,9 @@ class Model:
     def __iter__(self):
         return (getattr(self, col) for col in self.non_auto_fields())
 
-    def insert(self, cursor):
+    def insert(self, cursor=None):
+        if cursor is None:
+            cursor = g.cursor
         query = 'INSERT INTO %s (%s) VALUES (%s)' % (
                 self.tablename(),
                 ','.join(self.non_auto_fields()),
@@ -23,7 +26,9 @@ class Model:
             pk = cursor.fetchone()[0]
             setattr(self, self.Meta.pk, pk)
 
-    def update(self, cursor):
+    def update(self, cursor=None):
+        if cursor is None:
+            cursor = g.cursor
         params = ', '.join(["{}=%s".format(field) for field in self.non_auto_fields()])
         cursor.execute(
             "UPDATE %s SET %s WHERE %s=%%s" % (self.tablename(), params, self.Meta.pk),
@@ -198,3 +203,17 @@ class Restaurant(Model):
         table = 'restaurant'
         foreign_models = [Etablissement]
 
+
+
+def get_or_404(query, params, model):
+    g.cursor.execute(query, params)
+    row = g.cursor.fetchone()
+    if row is None:
+        return abort(404)
+    return model.from_dict(row)
+
+
+def list_of(query, params, model):
+    g.cursor.execute(query, params)
+    rows = g.cursor.fetchall()
+    return [model.from_dict(r) for r in rows]
