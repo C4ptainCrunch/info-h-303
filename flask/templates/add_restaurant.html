@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+
+
+{# {% from "macros.html" import render_field %} #}
+{% import "bootstrap/wtf.html" as wtf %}
+    {{wtf.quick_form(form,  button_map={"Ok":'default'})}}
+
+{% endblock %}

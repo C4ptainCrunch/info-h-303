@@ -21,7 +21,6 @@ class MultiCheckboxField(SelectMultipleField):
     def validate(self, *args, **kwargs):
         return True
 
-
 class Etablissement(WForm):
     name = TextField('Nom', [validators.Length(min=4, max=254)])
     phone = TelField('Téléphone', [validators.Length(min=6, max=20)])
@@ -61,11 +60,8 @@ class Restaurant(Form):
     takeaway = BooleanField("À emporter")
     delivery = BooleanField("Livre à domicile")   
 
-    string_of_days = ['one\r\ntwo\r\nthree\r\n']
-    list_of_days = ['Lu am', 'Lu pm', "Ma am", 'Ma pm', 'Me am', 'Me pm', "Je am", "Je pm", "Ve am", "Ve pm", "Sa am", "Sa pm", "Su am", "Su pm"]
-    # create a list of value/description tuples
     days = [(x, x) for x in list_of_days]
-    openings = MultiCheckboxField('Label', choices=days)
+    openings = MultiCheckboxField("Jours d'ouverture", choices=days)
 
     submit = SubmitField("Envoyer")
 
