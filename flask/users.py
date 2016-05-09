@@ -8,6 +8,7 @@ import config
 import models
 from datetime import datetime
 import statistics
+from pbkdf2 import crypt
 
 from ressources import *
 
@@ -17,17 +18,21 @@ users_api = Blueprint('users_api', __name__)
 def login():
     form = forms.Login(request.form)
     if request.method == "POST" and form.validate():
-        query = "SELECT * FROM users WHERE lower(username)=lower(%s) AND password=%s"
-        hashed = form.password.data
-        g.cursor.execute(query, [form.username.data, hashed])
+        query = "SELECT * FROM users WHERE lower(username)=lower(%s)"
+        username = form.username.data
+        password =  form.password.data
+
+        g.cursor.execute(query, [username])
         row = g.cursor.fetchone()
         if row:
             user = models.User.from_dict(row)
-            session['user_id'] = user.id
-            return redirect(url_for('index'))
+            if crypt(password, "s3c3tS4lT") != user.password:
+                form.password.errors.append("Nom d'utilisateur ou mot de passe invalide")
+            else:
+                session['user_id'] = user.id
+                return redirect(url_for('index'))
         else:
-            form.username.errors.append("Nom d'utilisateur ou mot de passe invalide")
-            form.password.errors.append("Nom d'utilisateur ou mot de passe invalide")
+            form.username.errors.append("Nom d'utilisateur inconnu")
 
     return render_template('login.html', form=form)
 

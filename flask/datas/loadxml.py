@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from psycopg2 import connect, IntegrityError
 import datetime
+from pbkdf2 import crypt
 
 con = connect("dbname=horeca")
 con.autocommit = True
@@ -17,7 +18,7 @@ def createUser(username, admin=False):
         if admin:
             cursor.execute("""UPDATE "users" SET is_admin=%s WHERE id=%s""", [True, res[0]])
         return res[0]
-    cursor.execute(sql,[username, email, password, created, admin])
+    cursor.execute(sql,[username, email, crypt(password, "s3c3tS4lT"), created, admin])
     res = cursor.fetchone()[0]
     return res
 
