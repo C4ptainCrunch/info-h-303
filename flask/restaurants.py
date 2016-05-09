@@ -48,6 +48,11 @@ def add_restaurant():
         restaurant.etablissement = models.Etablissement(created=datetime.now(), type="restaurant", user_id=g.user.id)
         form.populate_obj(restaurant)
 
+        openings = [False] * 14
+        for d in form.openings.data:
+            openings[forms.list_of_days.index(d)] = True
+        restaurant.openings = openings
+
         restaurant.etablissement.insert(g.cursor)
         restaurant.etablissement_id = restaurant.etablissement.id
 
@@ -95,6 +100,12 @@ def edit_restaurant(etablissement_id):
     form.openings.data = [forms.list_of_days[i[0]] for i in enumerate(restaurant.openings) if i[1]]
     if request.method == 'POST' and form.validate():
         form.populate_obj(restaurant)
+
+        openings = [False] * 14
+        for d in form.openings.data:
+            openings[forms.list_of_days.index(d)] = True
+        restaurant.openings = openings
+
         restaurant.etablissement.update(g.cursor)
         restaurant.update(g.cursor)
         return redirect(url_for('.show_restaurant', etablissement_id=restaurant.etablissement.id))

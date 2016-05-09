@@ -8,15 +8,8 @@ list_of_days = ['Lu am', 'Lu pm', "Ma am", 'Ma pm', 'Me am', 'Me pm', "Je am", "
 
 
 class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
+    widget = widgets.ListWidget(html_tag="ul",prefix_label=False)
     option_widget = widgets.CheckboxInput()
-    
-    def process_formdata(self, valuelist):
-        super(MultiCheckboxField, self).process_formdata(valuelist)
-        openings = [False] * 14
-        for d in self.data:
-            openings[list_of_days.index(d)] = True
-        self.data = openings
     
     def validate(self, *args, **kwargs):
         return True
