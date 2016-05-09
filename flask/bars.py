@@ -31,6 +31,24 @@ def list_bars():
         bars.append((bar, score))
     return render_template("list_bars.html", etablissements=bars)
 
+@bars_api.route("/add", methods=['GET', 'POST'])
+@admin_required
+def add_bar():
+    form = forms.Bar(request.form)
+    if request.method == 'POST' and form.validate():
+        bar = models.Bar()
+        bar.etablissement = models.Etablissement(created=datetime.now(), type="bar", user_id=g.user.id)
+        form.populate_obj(bar)
+
+        bar.etablissement.insert(g.cursor)
+        bar.etablissement_id = bar.etablissement.id
+
+        bar.insert(g.cursor)
+
+        return redirect(url_for('.show_bar', etablissement_id=bar.etablissement.id))
+
+    return render_template('add_hotel.html', form=form)
+
 @bars_api.route("/<int:etablissement_id>")
 def show_bar(etablissement_id):
     query = """
@@ -48,3 +66,28 @@ def show_bar(etablissement_id):
     bar = models.Bar.from_dict(data)
 
     return render_template('view_bar.html', bar=bar, e=bar.etablissement)
+
+@bars_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
+@admin_required
+def edit_bar(etablissement_id):
+    query = """
+    SELECT {}, {}, {} FROM bar
+    JOIN etablissement ON bar.etablissement_id = etablissement.id
+    JOIN users ON etablissement.user_id = users.id
+    WHERE bar.etablissement_id=%s AND etablissement.type='bar'
+    """.format(models.Etablissement.star(), models.User.star(), models.Bar.star())
+    
+    g.cursor.execute(query, [etablissement_id])
+    data = g.cursor.fetchone()
+    bar = models.Bar.from_dict(data)
+    if not data:
+        return  abort(404)
+
+    form = forms.Bar(request.form, obj=bar)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(bar)
+        bar.etablissement.update(g.cursor)
+        bar.update(g.cursor)
+        return redirect(url_for('.show_bar', etablissement_id=bar.etablissement.id))
+
+    return render_template('add_hotel.html', form=form)

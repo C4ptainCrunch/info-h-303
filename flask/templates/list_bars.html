@@ -15,9 +15,11 @@
         <small>
             {% if not bar.smoker %}<i class="fa fa-2x">&#128685;</i>{% endif %}
             <span class="stars">
+                {% if score %}
                 {%for i in range(score|round|int) %}
                     <i class="fa fa-star"></i>
                 {% endfor %}
+                {% endif %}
             </span>
         </small>
     </h1>
