@@ -2,6 +2,10 @@
 {% block title %}Index{% endblock %}
 {% block content %}
 
+{% if user.is_admin %}
+        <a href="/hotels/add" class="btn btn-success">Ajouter un hotel</a>
+{% endif %}
+
 {% for elem in etablissements %}
 {% set hotel = elem[0] %}
 {% set e = hotel.etablissement %}
