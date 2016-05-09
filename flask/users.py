@@ -35,3 +35,9 @@ def profile(pk):
     query = "SELECT * FROM users WHERE id=%s"
     user = models.get_or_404(query, [pk], models.User)
     return render_template('profile.html', profile=user)
+
+@users_api.route("/logout")
+def logout():
+    if "user_id" in session:
+        del session['user_id']
+    return redirect(url_for('index'))
