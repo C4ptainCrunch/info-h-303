@@ -36,12 +36,9 @@ def add_hotel():
     form = forms.Hotel(request.form)
     if request.method == 'POST' and form.validate():
         hotel = models.Hotel()
-        hotel.etablissement = models.Etablissement()
+        hotel.etablissement = models.Etablissement(created=datetime.now(), type="hotel", user_id=g.user.id)
         form.populate_obj(hotel)
 
-        hotel.etablissement.created=datetime.now()
-        hotel.etablissement.type="hotel"
-        hotel.etablissement.user_id = g.user.id
         hotel.etablissement.insert(g.cursor)
         hotel.etablissement_id = hotel.etablissement.id
         hotel.etablissement.set_picture(form.etablissement.picture, request.files)
@@ -79,8 +76,7 @@ def edit_hotel(etablissement_id):
     JOIN users ON etablissement.user_id = users.id
     WHERE hotel.etablissement_id=%s AND etablissement.type='hotel'
     """.format(models.Etablissement.star(), models.User.star(), models.Hotel.star())
-
-
+    
     g.cursor.execute(query, [etablissement_id])
     data = g.cursor.fetchone()
     hotel = models.Hotel.from_dict(data)

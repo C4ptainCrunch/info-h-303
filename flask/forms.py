@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from flask_wtf.html5 import TelField, URLField, IntegerField, DecimalField, EmailField
 from flask_wtf.file import FileField
-from wtforms import TextField, TextAreaField, SubmitField, validators, PasswordField, FormField
+from wtforms import TextField, TextAreaField, SubmitField, validators, PasswordField, FormField, BooleanField
 from wtforms import Form as WForm
 
 class Etablissement(WForm):
@@ -27,6 +27,13 @@ class Hotel(Form):
     rooms = IntegerField("Nombre de chambres", validators=[validators.NumberRange(min=0)])
     price = IntegerField("Prix d'une chambre double", validators=[validators.NumberRange(min=0)])
 
+    submit = SubmitField("Envoyer")
+
+class Bar(Form):
+    etablissement = FormField(Etablissement)
+    smoker = BooleanField("Fumeur")
+    food = BooleanField("Petite restauration")
+    
     submit = SubmitField("Envoyer")
 
 class Login(Form):
