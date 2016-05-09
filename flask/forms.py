@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from flask_wtf.html5 import TelField, URLField, IntegerField, DecimalField, EmailField
 from flask_wtf.file import FileField
-from wtforms import TextField, TextAreaField, SubmitField, validators, PasswordField
+from wtforms import TextField, TextAreaField, SubmitField, validators, PasswordField, FormField
 from wtforms import Form as WForm
 
 class Etablissement(WForm):
