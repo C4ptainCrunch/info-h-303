@@ -7,12 +7,28 @@
 {% endif %}
 
 {% for elem in etablissements %}
-{% set hotel = elem[0] %}
-{% set e = hotel.etablissement %}
-{% set score = elem[1] %}
-<h1>{{e.name}} <small>par {{e.user.username}}</small></h1>
-{{hotel.stars}}
-{{score}}
+    {% set hotel = elem[0] %}
+    {% set e = hotel.etablissement %}
+    {% set score = elem[1] %}
+    <h1>
+        <a href="/hotels/{{e.id}}">{{e.name}}</a>
+        <small>
+            <span class="stars">
+                {% if score %}
+                    {%for i in range(score|round|int) %}
+                        <i class="fa fa-star"></i>
+                    {% endfor %}
+                {% endif %}
+            </span>
+            <span class="stars">
+                Etoiles
+                {%for i in range(hotel.stars) %}
+                    <i class="fa fa-star"></i>
+                {% endfor %}
+            </span>
+
+        </small>
+    </h1>
 {% endfor %}
 
 {% endblock %}
