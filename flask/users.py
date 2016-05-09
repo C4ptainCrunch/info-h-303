@@ -27,7 +27,7 @@ def login():
         if row:
             user = models.User.from_dict(row)
             if crypt(password, "s3c3tS4lT") != user.password:
-                form.password.errors.append("Nom d'utilisateur ou mot de passe invalide")
+                form.password.errors.append("Mot de passe invalide")
             else:
                 session['user_id'] = user.id
                 return redirect(url_for('index'))
@@ -35,6 +35,27 @@ def login():
             form.username.errors.append("Nom d'utilisateur inconnu")
 
     return render_template('login.html', form=form)
+
+@users_api.route("/register", methods=['GET', 'POST'])
+def register():
+    form = forms.User(request.form)
+    if request.method == "POST" and form.validate():
+        user = models.User(
+            username=form.username.data,
+            password=crypt(form.password.data, "s3c3tS4lT"),
+            email=form.email.data,
+        )
+        try:
+            user.insert()
+        except psycopg2.IntegrityError as e:
+            if "(username)" in str(e):
+                form.username.errors.append("Ce nom d'utilisateur est déjà pris")
+            if "(email)" in str(e):
+                form.email.errors.append("Cet email est déjà utilisé par un autre utilisateur")
+        else:
+            session['user_id'] = user.id
+            return redirect(url_for('index'))
+    return render_template('register.html', form=form)
 
 @users_api.route("/<int:pk>")
 def profile(pk):
