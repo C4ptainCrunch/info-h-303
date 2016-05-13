@@ -202,6 +202,9 @@ Nous avons considéré que deux utilisateurs ne peuvent avoir la même adresse e
 \input{requetes}
 
 \section{Implémentation et choix}
+
+Le projet peut être exécuté en suivant les instructions se trouvant dans le fichier readme à la racine du projet.
+
 \subsection{Language et bibliothèques}
 
 Nous avons choisi d'utiliser \textbf{Python 3} ainsi que le framework \textbf{Flask} pour implémenter notre application web. Nous avons choisi \textbf{Python 3} car il est notre langage de prédilection et qu'il dispose d'un écosystème de librairies très développé.
@@ -220,9 +223,19 @@ Notre choix s'est porté sur \textbf{Postgresql} plutôt que \textbf{MySQL} car 
 
 \subsubsection{Contraintes}
 
+Nous n'avons pas implémenté les contraintes nécessitent de vérifier plusieurs tables à la fois (comme par exemple: ``la date de création d'un établissement doit être supérieure à celle d'inscription de l'utilisateur qui le crée'') car \textbf{Postgresql} (\textbf{MySQL}, \textbf{SQLite}) ne le permet pas à l'aide du mot clé \texttt{CHECK}.
+
+Nous nous sommes documentés et il semblerait qu'il soit possible de déclarer des \texttt{TRIGGER} qui sont déclenchés à l'insertion d'une ligne et dans lequel il est possible de faire tourner plus de logique mais ils nous a semblé qu'implémenter cette solution était hors du cadre de ce projet.
+
 \subsubsection{Indexes}
 
+
+
 \subsubsection{\texttt{ON DELETE}}
+
+Nous avons décidé que les suppressions dans la base de donnée devraient résulter en la suppression des entités liées (\texttt{ON DELETE CASCADE}) car par exemple, il nous semble logique qu'il ne faut pas garder un commentaire si l'établissement sur lequel il porte n'existe plus.
+
+La seule entorse à cette règle a été pour les administrateurs. Si un administrateur ne peut être supprimé si il a des établissements (\texttt{ON DELETE RESTRICT}).
 
 \subsection{Script d'insertion des données}
 
