@@ -126,5 +126,13 @@ def api_all():
                     mimetype="application/json")
 
 
+@app.route("/etablissements/<int:pk>")
+def get_etablissement(pk):
+    query = "SELECT {} FROM etablissement WHERE id=%s".format(models.Etablissement.star())
+    e = models.get_or_404(query, [pk], models.Etablissement)
+
+    return redirect("/{}s/{}".format(e.type, e.id))
+
+
 if __name__ == "__main__":
     app.run(debug=config.DEBUG)

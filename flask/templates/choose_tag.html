@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Taggez {{e.name}}{% endblock %}
+
+{% block header %}
+    <div style="position: relative;">
+        <img src="{{e.get_picture()}}" style="object-position: 50% 80%; position: relative;  top: -1.4em; height: 20vh; max-height: 12em;object-fit: cover; width: 100%">
+        <h1 style="font-size: 4em; position: absolute; top: 0.1em; text-align: center; width:100%;overflow: hidden; height: 1em;">{{e.name}}</h1>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<h1>Ajoutez des tags à {{e.name}}</h1>
+<p>Cliquez sur un tag pour l'ajouter :</p>
+<p>
+{% for tag in tags %}
+    <a class="btn btn-success" href="/tags/add/{{e.id}}/{{tag.id}}">
+        {{tag.name}}
+    </a>
+</p>
+{% endfor %}
+
+
+{% endblock %}

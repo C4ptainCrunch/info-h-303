@@ -29,3 +29,31 @@ def list_tags():
     tags = itertools.groupby(rows, key=lambda x: (x['label.name'], x['label.id']))
     tags = [(group, [(models.Etablissement.from_dict(e), e['tag_count']) for e in data]) for group, data in tags]
     return render_template("list_tags.html", tags=tags)
+
+@tags_api.route("/add/<int:epk>", methods=['GET', 'POST'])
+@auth_required
+def list_add_tag(epk):
+    query = """
+    SELECT label.* FROM label
+    LEFT JOIN etablissement_label
+        ON etablissement_label.label_id=label.id
+        AND etablissement_label.user_id=%s
+        AND etablissement_label.etablissement_id=%s
+    WHERE etablissement_label.label_id IS NULL"""
+
+    sq = "SELECT {} FROM etablissement WHERE id=%s".format(models.Etablissement.star())
+    e = models.get_or_404(sq, [epk], models.Etablissement)
+    tags = models.list_of(query, [g.user.id, epk], models.Label)
+    return render_template("choose_tag.html", e=e, tags=tags)
+
+
+@tags_api.route("/add/<int:epk>/<int:tid>")
+@auth_required
+def add_tag(epk, tid):
+    query = """
+    INSERT INTO etablissement_label
+    (etablissement_id, user_id, label_id)
+    VALUES (%s, %s, %s)
+    """
+    g.cursor.execute(query, [epk, g.user.id, tid])
+    return redirect("/etablissements/"+ str(epk))

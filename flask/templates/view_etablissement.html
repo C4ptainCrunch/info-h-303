@@ -16,13 +16,16 @@
         <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning">Editer</a>
 {% endif %}
 
-
+    <h3>Tags</h3>
 {% for tag in tags %}
-    {{tag['label.name']}}
-    {% if tag['was_tagged_by_user'] %}
-        X
-    {% endif %}
+    <span class="label label-success">
+        {{tag['label.name']}}
+        {% if tag['was_tagged_by_user'] %}
+            &nbsp;<a href="/tags/remove/{{e.id}}/{{tag['label.id']}}"><i class="fa fa-times" aria-hidden="true"></i></a>
+        {% endif %}
+    </span>&nbsp;
 {% endfor %}
+<span class="label label-info"><a href="/tags/add/{{e.id}}">Ajouter <i class="fa fa-plus" aria-hidden="true"></i></a></span>
 
 {% block speciation %}{% endblock %}
 

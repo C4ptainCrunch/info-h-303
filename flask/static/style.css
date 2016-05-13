@@ -127,3 +127,6 @@ h1 {
     border: none;
 }
 
+.label a {
+    color: white;
+}
