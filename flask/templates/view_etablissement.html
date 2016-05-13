@@ -62,6 +62,23 @@
                 <h3 class="panel-title">Informations</h3>
             </div>
             <div class="panel-body">
+                <h4>Téléphone</h4>
+                <p>
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    {{e.phone}}
+                </p>
+                {% if e.url %}
+                <h4>Site web</h4>
+                <p>
+                    <i class="fa fa-laptop" aria-hidden="true"></i>
+                    <a href="{{e.url}}">{{e.url}}</a>
+                </p>
+                {% endif %}
+                <h4>Adresse</h4>
+                <address>
+                  <strong>{{e.address_number}}, {{e.address_street}}</strong><br>
+                  {{e.address_zip}} {{e.address_city}}<br>
+                </address>
                 <h4>Tags</h4>
                 <p style="line-height: 1.6em;">{% for tag in tags %}
                     <span class="label label-success"><i class="fa fa-tag" aria-hidden="true"></i>
@@ -78,7 +95,9 @@
                     </a>
                 </span></p>
 
-                <h4>Créateur : {{e.user.username}}</h4>
+                <h4>Carte</h4>
+
+                <h4>Créé par {{e.user.username}} {{e.created|humanize_date}}</h4>
 
                 {% if user.is_admin %}
                     <h4>Administration</h4>
