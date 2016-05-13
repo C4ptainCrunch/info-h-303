@@ -2,7 +2,7 @@
 select * from users where id in (select user_id from comment where etablissement_id in (SELECT etablissement_id FROM comment WHERE user_id=(SELECT id FROM users WHERE username='Brenda') and score > 3) and score > 3 GROUP BY user_id HAVING COUNT(*) >= 3);
 
 -- R2:
-select u.* from etablissement join comment on etablissement.id = comment.etablissement_id join users on comment.user_id = users.id join comment as c on etablissement.id = c.etablissement_id join users as u on c.user_id = u.id where users.username = 'Brenda' and comment.score >= 4 and u.username != 'Brenda' group by u.id having bool_and (c.score >= 4);
+select etablissement.* from comment join etablissement on comment.etablissement_id=etablissement.id and comment.score > 3 where comment.user_id in (select u.id from etablissement join comment on etablissement.id = comment.etablissement_id join users on comment.user_id = users.id join comment as c on etablissement.id = c.etablissement_id join users as u on c.user_id = u.id where users.username = 'Brenda' and comment.score >= 4 and u.username != 'Brenda' group by u.id having bool_and (c.score >= 4)) group by etablissement.id;
 
 -- R3
 select etablissement.* from etablissement left join comment on etablissement.id = comment.etablissement_id GROUP BY etablissement.id HAVING COUNT(*) <= 1;
