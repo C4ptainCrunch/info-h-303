@@ -59,4 +59,4 @@ def edit_comment(cid):
         return abort(401)
 
 
-    return render_template('edit_user.html', form=form)
+    return render_template('edit_comment.html', form=form)
