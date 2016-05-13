@@ -69,7 +69,7 @@ def show_hotel(etablissement_id):
     tags = etablissement.get_labels(etablissement_id, g.user.id)
     comments = etablissement.get_comments(etablissement_id)
 
-    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement, tags=tags, comments=comments, commentForm=forms.Comment())
+    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement, tags=tags, comments=comments, commentForm=forms.Comment(), should_comment=(len(list(filter(lambda x:x.user_id == g.user.id and x.date == date.today(), comments))) == 0))
 
 @hotels_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
 @admin_required
