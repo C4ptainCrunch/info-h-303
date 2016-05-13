@@ -2,31 +2,41 @@
 {% block title %}Tags{% endblock %}
 {% block content %}
 
+
+<h4>Tags populaires :</h4>
+{% for tag in tagsR5 %}<a href="#{{tag['label.id']}}">{{tag["label.name"]}}</a>, {% endfor %}
+
+<div class="row">
+    {% for ((tag, tag_id), etablissements) in tags %}
+        <div class="col-md-6">
+        <h1 id="{{tag_id}}">
+            {{tag}}
+            {% if user.is_admin %}
+            <a href="/tags/{{tag_id}}/delete" class="btn btn-danger btn-xs">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Supprimer
+            </a>
+            <a href="/tags/{{tag_id}}/edit" class="btn btn-warning btn-xs">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+                Editer
+            </a>
+            {% endif %}
+        </h1>
+        <ul>
+            {% for (etablissement, tag_cout) in etablissements %}
+                <li><a href="{{etablissement.get_url()}}">{{etablissement.name}}</a> <span class="badge">{{tag_cout}}</span></li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endfor %}
+</div>
+
 {% if user.is_admin %}
-    <h3>Ajoutez votre label</h3>
+    <hr>
+    <h3>Ajoutez un nouveau label</h3>
     {% import "bootstrap/wtf.html" as wtf %}
     {{wtf.quick_form(form, action="/tags/create", form_type="inline")}}
 {% endif %}
-
-Tags populaires : {% for tag in tagsR5 %}<a href="#{{tag['label.id']}}">{{tag["label.name"]}}</a>, {% endfor %}
-
-{% for ((tag, tag_id), etablissements) in tags %}
-    <h1 id="{{tag_id}}">
-        {{tag}}
-        {% if user.is_admin %}
-        <a href="/tags/{{tag_id}}/delete" class="btn btn-danger btn-sm">
-            <i class="fa fa-trash-o" aria-hidden="true"></i>
-            Supprimer
-        </a>
-        <a href="/tags/{{tag_id}}/edit" class="btn btn-warning btn-sm">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
-            Editer
-        </a>
-        {% endif %}
-    </h1>
-    {% for (etablissement, tag_cout) in etablissements %}
-        <a href="{{etablissement.get_url()}}">{{etablissement.name}}</a> ({{tag_cout}})
-    {% endfor %}
-{% endfor %}
+<br><br>
 
 {% endblock %}
