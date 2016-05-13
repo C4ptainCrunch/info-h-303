@@ -24,7 +24,13 @@
                       </a>
                   </h3>
                   <p class="row-fluid text-center">
-
+                        <p style="color: red" class="text-center">
+                            {% if score %}
+                            {%for i in range(score|round|int) %}
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                            {% endfor %}
+                            {% endif %}
+                        </p>
                   </p>
                 </div>
             </div>
