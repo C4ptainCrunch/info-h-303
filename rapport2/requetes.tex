@@ -1,0 +1,90 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{blindtext}
+\usepackage[section]{placeins}
+
+\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+  \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
+\def\join{\bowtie}
+
+
+\begin{document}
+\section{R1}
+\subsection{AR:}
+\(
+BC(C_1, C_2, C_3) \leftarrow \pi_{C_1.eid, C_2.eid, C_3.eid} (((C_1 \join_{C_1.id != C_2.id \land C_1.score > 3 \land C_2.score>3} C_2)\\
+\join_{C_1.id != C_3.id \land C_2.id != C3.id \land C_3.score>3}) \join_{C_1.uid = U.id \land C_2.uid = U.id \land C_3.uid = U.id}(\sigma_{U.username = "Brenda"}(U)))
+\)\\
+
+\(
+AC(uid, C_1, C_2, C_3) \leftarrow \pi_{U.id, C_1.eid, C_2.eid, C_3.eid} (((C_1 \join_{C_1.id != C_2.id \land C_1.score > 3 \land C_2.score>3} C_2)\\
+\join_{C_1.id != C_3.id \land C_2.id != C3.id \land C_3.score>3}) \join_{C_1.uid != U.id \land C_2.uid != U.id \land C_3.uid != U.id}(\sigma_{U.username = "Brenda"}(U)))
+\)\\
+
+\(
+\pi_{AC.uid}(BC \join_{BC.C_1 = AC.C_1 \land BC.C_2 = AC.C_2 \land BC.C_3 = AC.C_3} AC)
+\)
+
+\subsection{TC}
+\(
+\{
+u|users(u) \land \exists b(users(b) \land b.username="Brenda") \land u.id \neq b.id
+\land\\
+\exists e_1(etablissement(e_1) \land \exists c_1 \exists c_2(comment(c_1)\land comment(c_2) \land c_1.uid = u.id \land c_1.score > 3 \land c_2.uid = b.uid \land c_2.score >3))
+\land\\
+\exists e_2(etablissement(e_2) \land e_1 \neq e_2 \land \exists c_3 \exists c_4(comment(c_3)\land comment(c_4) \land c_3.uid = u.id \land c_3.score > 3 \land c_4.uid = b.uid \land c_4.score >3))
+\land\\
+\exists e_3(etablissement(e_3) \land e_1 \neq e_3 \land e_2 \neq e_3 \land \exists c_5 \exists c_6(comment(c_5)\land comment(c_6) \land c_5.uid = u.id \land c_5.score > 3 \land c_6.uid = b.uid \land c_6.score >3))
+\}
+\)
+
+\section{R2}
+\subsection{AR}
+\(
+AC \leftarrow \pi_{C.uid, C.eid}(\sigma_{C.score>3}(C))
+\\
+BC \leftarrow \pi_{C.eid}(\sigma_{U.name="Brenda", C.score>3}(C*U))
+\\
+U \leftarrow  \pi_{AC.uid}(AC \div BC)
+\\
+\pi_{C.eid}(\sigma_{C.uid = U.uid \land C.score>3}(C))
+\)
+
+\subsection{TC}
+\(
+\{
+e|etablissement(e) \land \exists c(comment(c) \land c.score>3 \land c.eid = e.id \land \exists u(users(u) \land c.uid = u.id \land \forall f \forall b(comment(f) \land users(b) \land f.uid = b.uid\land b.username="Brenda" \land f.score > 3 \rightarrow \exists a(comment(a)\land a.uid = u.id \land f.eid = a.eid\land a.score > 3)))))
+\}
+\)
+
+\section{R3}
+\subsection{AR}
+\(
+Ew2C \leftarrow \pi_{C_1.eid, C_1.id}(C_1 \join_{C_1.eid=C_2.eid \land C_1.id != C_2.id})
+\\
+\pi_{E.id}(\pi_{E.id, C.id}(E \leftouterjoin_{E.id=C.eid}  C) - EW2C)
+\)
+\subsection{TC}
+
+\(
+\{e | etablissement(e) \land \exists c(comment(c) \land c.eid = e.id) \rightarrow \neg\exists d(comment(d) \land d.eid = e.id \land d.id \neq c.id)\}
+\)
+
+\section{R4}
+\subsection{AR}
+\(
+\pi_{E.uid}(E) - \pi_{E.id}(E\join_{E.id = C.id \land E.uid = C.uid}C)
+\)
+\subsection{TC}
+\(
+\{e.uid|etablissement(e)\land \neg \exists c(comment(c) \land c.uid = e.uid \land c.eid = e.id)\}
+\)
+\end{document}

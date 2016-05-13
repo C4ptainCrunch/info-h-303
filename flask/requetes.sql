@@ -18,5 +18,5 @@ select label.name from label inner join (select etablissement_label.label_id, et
 -- Inorrecte, à fixer car devrais renvoyer le même nombre de ligne que:
 select label.name from label join etablissement_label on label.id = etablissement_label.label_id GROUP BY label.id HAVING count(*) > 5;
 -- Should be working:
-select label.* from label full join (select etablissement_label.label_id as id, avg(comment.score) as score from etablissement_label left join etablissement on etablissement_label.etablissement_id = etablissement.id full join comment on etablissement.id = comment.etablissement_id group by etablissement_label.label_id, etablissement.id, etablissement_label.user_id) l on label.id = l.id group by label.id HAVING count(*) >= 5 order by avg(l.score);
+select label.* from label full join (select etablissement_label.label_id as id, avg(comment.score) as score from etablissement_label left join etablissement on etablissement_label.etablissement_id = etablissement.id full join comment on etablissement.id = comment.etablissement_id group by etablissement_label.label_id, etablissement.id) l on label.id = l.id group by label.id HAVING count(*) >= 5 order by avg(l.score);
 -- group by etablissement_label.id instead
