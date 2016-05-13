@@ -54,7 +54,7 @@
         {% else %}
             <p class="text-muted">Il n'y a pas de commentaires pour l'instant...</p>
         {% endfor %}
-        {% if should_comment %}
+        {% if user.is_authenticated() and should_comment %}
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="panel-title">Ajoutez votre commentaire</h3>
@@ -100,12 +100,14 @@
                         {% endif %}
                     </span> &nbsp;
                 {% endfor %}</p>
-                <p><span class="label label-info">
-                    <a href="/tags/add/{{e.id}}">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        Ajouter un nouveau tag
-                    </a>
-                </span></p>
+                {% if user.is_authenticated() %}
+                    <p><span class="label label-info">
+                        <a href="/tags/add/{{e.id}}">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            Ajouter un nouveau tag
+                        </a>
+                    </span></p>
+                {% endif %}
 
                 <h4>Carte</h4>
                 <div id="emap"></div>
