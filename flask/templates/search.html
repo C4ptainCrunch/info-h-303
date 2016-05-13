@@ -3,16 +3,32 @@
 {% block content %}
 
 {% if term %}
-<h1>Votre recherche : {{term}} <small> a retourné {{results|length}} résulats.</small>
-</h1>
 
 <div id="searchmap"></div>
-{% for result in results %}
-    <h3>{{result.name}} <small>{{result.phone}}</small></h3>
-{% else %}
-    <h1 class="text-center">Oh non ! Aucun résulat :(</h1>
-    <p class="text-center">Essayez un établissement <a href="/random">au hasard !</a></p>
-{% endfor %}
+<h1>Votre recherche <small> a retourné {{results|length}} résulats.</small></h1>
+
+<div class="row">
+    {% for e in results %}
+        <div class="col-md-4 col-sm-6">
+            <div class="thumbnail">
+                <a href="/etablissements/{{e.id}}">
+                    <img src="{{e.get_picture()}}" style="height: 15em; width:100%; object-fit: cover;">
+                </a>
+                <div class="caption">
+                  <h3 class="row-fluid text-center">
+                      {{e.name}} <a href="/etablissements/{{e.id}}" class="btn btn-primary" role="button">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                          Plus d'infos
+                      </a>
+                  </h3>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-center">Oh non ! Aucun résulat :(</h1>
+        <p class="text-center">Essayez un établissement <a href="/random">au hasard !</a></p>
+    {% endfor %}
+</div>
 
 {% else %}
 <br><br><br><br><br><br><br><br><br><br><br>
@@ -24,7 +40,7 @@
   <button type="submit" class="btn btn-success input-lg">Chercher <i class="fa fa-search" ></i></button>
 </form>
 <br>
-<p class="text-muted text-center">Conseil : cherchez deux mots en mettant un + entre les deux.<p>
+<p class="text-muted text-center">La recherche est intelligente, essayez-la !<p>
 
 
 {% endif %}
