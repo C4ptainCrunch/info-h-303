@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 import forms
 import config
 import models
-from datetime import datetime
+from datetime import datetime, date
 import statistics
 import etablissement
 

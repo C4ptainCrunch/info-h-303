@@ -31,7 +31,7 @@ def get_comments(etablissement_id):
     JOIN users
         ON comment.user_id=users.id
     WHERE comment.etablissement_id=%s
-    ORDER BY date DESC
+    ORDER BY date DESC, comment.id DESC
     """.format(models.Comment.star(), models.User.star())
 
     return models.list_of(query, [etablissement_id], models.Comment)
