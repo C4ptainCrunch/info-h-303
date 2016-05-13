@@ -57,3 +57,14 @@ def add_tag(epk, tid):
     """
     g.cursor.execute(query, [epk, g.user.id, tid])
     return redirect("/etablissements/"+ str(epk))
+
+
+@tags_api.route("/remove/<int:epk>/<int:tid>")
+@auth_required
+def remove_tag(epk, tid):
+    query = """
+    DELETE FROM etablissement_label
+    WHERE etablissement_id=%s AND user_id=%s AND label_id=%s
+    """
+    g.cursor.execute(query, [epk, g.user.id, tid])
+    return redirect("/etablissements/"+ str(epk))

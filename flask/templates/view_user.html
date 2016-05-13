@@ -40,4 +40,12 @@
     {% endfor %}
 {% endif%}
 
+{% if tags %}
+    <h1>Tags de cet utilisateur</h1>
+    {% for tag in tags %}
+        <span class="label label-success">{{tag['label.name']}}</span>
+        sur <a href="/etablissements/{{tag['etablissement.id']}}">{{tag['etablissement.name']}}</a><br>
+    {% endfor %}
+{% endif %}
+
 {% endblock %}

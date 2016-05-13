@@ -76,7 +76,16 @@ def profile(pk):
     )"""
     related = models.list_of(related_query.format(models.User.star()), [pk, pk], models.User)
 
-    return render_template('view_user.html', profile=user, related=related)
+    tags_query = """
+    SELECT {}, {} FROM etablissement_label
+        JOIN etablissement ON etablissement_label.etablissement_id=etablissement.id
+        JOIN label ON label.id=etablissement_label.label_id
+        WHERE etablissement_label.user_id=%s
+    """.format(models.Label.star(), models.Etablissement.star())
+    g.cursor.execute(tags_query, [pk])
+    tags = g.cursor.fetchall()
+    # raise
+    return render_template('view_user.html', profile=user, related=related, tags=tags)
 
 @users_api.route("/<int:pk>/set_admin")
 @admin_required
