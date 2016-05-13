@@ -79,13 +79,14 @@ def show_restaurant(etablissement_id):
 
     restaurant = models.Restaurant.from_dict(data)
     tags = etablissement.get_labels(etablissement_id, g.user.id)
-
+    comments = etablissement.get_comments(etablissement_id)
 
     return render_template(
         'view_restaurant.html',
         restaurant=restaurant,
         e=restaurant.etablissement,
-        tags=tags
+        tags=tags,
+        comments=comments
     )
 
 @restaurants_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
