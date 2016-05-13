@@ -1,22 +1,4 @@
-\documentclass[a4paper,10pt]{report}
-\usepackage[french]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{fullpage}
-\usepackage{blindtext}
-\usepackage[section]{placeins}
 
-\def\ojoin{\setbox0=\hbox{$\bowtie$}%
-  \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
-\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
-\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
-\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
-\def\join{\bowtie}
-
-
-\begin{document}
 \section{R1}
 \subsection{AR:}
 \(
@@ -87,4 +69,3 @@ Ew2C \leftarrow \pi_{C_1.eid, C_1.id}(C_1 \join_{C_1.eid=C_2.eid \land C_1.id !=
 \(
 \{e.uid|etablissement(e)\land \neg \exists c(comment(c) \land c.uid = e.uid \land c.eid = e.id)\}
 \)
-\end{document}
