@@ -27,6 +27,36 @@ def add_comment(epk, uid):
         comment.date = datetime.now().date()
         comment.insert(g.cursor)
 
-        return redirect(url_for('get_etablissement', pk=epk))
+    return redirect(url_for('get_etablissement', pk=epk))
 
-    return render_template('add_hotel.html', form=form)
+@comment_api.route("/edit/<int:cid>", methods=["GET", "POST"])
+@auth_required
+def edit_comment(cid):
+    query = """
+    SELECT {} FROM comment
+    WHERE comment.id=%s
+    """.format(models.Comment.star())
+
+    g.cursor.execute(query, [cid])
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+    comment = models.Comment.from_dict(data)
+    uid = comment.user_id
+    epk = comment.etablissement_id
+    date = comment.date 
+
+    if g.user.id == uid or g.user.is_admin:
+        form = forms.Comment(request.form, obj=comment)
+        if request.method == 'POST' and form.validate():
+            form.populate_obj(comment)
+            comment.user_id = uid
+            comment.etablissement_id = epk
+            comment.date = data
+            comment.update(g.cursor)
+            return redirect(url_for('get_etablissement', pk=epk))
+    else:
+        return abort(401)
+
+
+    return render_template('edit_user.html', form=form)
