@@ -19,7 +19,9 @@ Dépendances : `python3`, `postgresql`
 
 # Configuration et démarrage
 
-Editez `flask/local_config.py` pour écraser les valeurs par défaut spécifiées dans `flask/config.py`
+Editez `flask/local_config.py` pour écraser les valeurs par défaut spécifiées dans `flask/config.py`.
+
+Démarrez l'app avec :
 
     cd flask/
     python app.py
