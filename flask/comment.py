@@ -60,3 +60,28 @@ def edit_comment(cid):
 
 
     return render_template('edit_comment.html', form=form)
+
+@comment_api.route("/delete/<int:cid>")
+@auth_required
+def delete(cid):
+    queryGet = """
+    SELECT {} FROM comment
+    WHERE comment.id=%s
+    """.format(models.Comment.star())
+    queryDel = """
+    DELETE FROM comment
+    WHERE id=%s
+    """
+
+    g.cursor.execute(queryGet, [cid])
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+    comment = models.Comment.from_dict(data)
+    uid = comment.user_id
+
+    if g.user.id == uid or g.user.is_admin:
+        g.cursor.execute(queryDel, [cid])
+        return redirect("/etablissements/"+ str(comment.etablissement_id))
+    return abort(401)
+
