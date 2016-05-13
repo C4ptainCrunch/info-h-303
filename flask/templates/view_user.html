@@ -52,6 +52,24 @@
         </h3>
 {% endif%}
 
+{% if recommandations and profile.id == user.id %}
+    <h2>Nous vous recommandons les établissements suivants</h2>
+    <div class="row">
+        {% for etablissement in recommandations %}
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>
+                            <a href="/etablissements/{{etablissement.id}}">{{etablissement.name}}</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
 {% if tags %}
     <h2>{{profile.username}} a taggé ces établissements</h2>
     <div class="row">
