@@ -8,4 +8,13 @@
 {% if profile.is_admin %}
     <span class="label label-success">Administrateur</span>
 {% endif %}
+{% if user.is_admin %}
+    {% if profile.id != user.id %}
+        {% if profile.is_admin %}
+            <a href="/users/{{profile.id}}/unset_admin">Dégrader</a>
+        {% else %}
+            <a href="/users/{{profile.id}}/set_admin">Promouvoir</a>
+        {% endif%}
+    {% endif %}
+{% endif%}
 {% endblock %}

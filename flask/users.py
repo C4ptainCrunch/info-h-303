@@ -63,6 +63,27 @@ def profile(pk):
     user = models.get_or_404(query, [pk], models.User)
     return render_template('profile.html', profile=user)
 
+@users_api.route("/<int:pk>/set_admin")
+@admin_required
+def set_admin(pk):
+    query = "SELECT * FROM users WHERE id=%s"
+    user = models.get_or_404(query, [pk], models.User)
+    user.is_admin = True
+    user.update()
+    return redirect("/users/" + str(user.id))
+
+@users_api.route("/<int:pk>/unset_admin")
+@admin_required
+def unset_admin(pk):
+    if pk == g.user.id:
+        return abort(401)
+    query = "SELECT * FROM users WHERE id=%s"
+    user = models.get_or_404(query, [pk], models.User)
+    user.is_admin = False
+    user.update()
+    return redirect("/users/" + str(user.id))
+
+
 @users_api.route("/logout")
 def logout():
     if "user_id" in session:
