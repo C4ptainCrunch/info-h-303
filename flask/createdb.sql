@@ -19,13 +19,8 @@ CREATE TABLE "users" (
   "created" TIMESTAMP NOT NULL,
   "is_admin" BOOLEAN NOT NULL DEFAULT FALSE
 );
-
-CREATE TABLE "session" (
-  "id" SERIAL PRIMARY KEY,
-  "user_id" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
-  "cookie" VARCHAR(128) NOT NULL UNIQUE,
-  "created" TIMESTAMP NOT NULL
-);
+CREATE INDEX ON "users" (is_admin);
+CREATE INDEX ON "users" (username, password);
 
 CREATE TABLE "etablissement" (
   "id" SERIAL PRIMARY KEY,
@@ -45,6 +40,9 @@ CREATE TABLE "etablissement" (
   "type" etablissement_type NOT NULL,
   "picture" VARCHAR(100)
 );
+CREATE INDEX ON "etablissement" (name);
+CREATE INDEX ON "etablissement" (user_id);
+CREATE INDEX ON "etablissement" (type);
 
 CREATE TABLE "hotel" (
   "etablissement_id" INTEGER PRIMARY KEY REFERENCES "etablissement" ON DELETE CASCADE,
@@ -77,7 +75,10 @@ CREATE TABLE "comment" (
   "text" TEXT NOT NULL,
   UNIQUE ("date", "user_id", "etablissement_id")
 );
-
+CREATE INDEX ON "comment" (user_id);
+CREATE INDEX ON "comment" (date);
+CREATE INDEX ON "comment" (score);
+CREATE INDEX ON "comment" (etablissement_id);
 
 CREATE TABLE "etablissement_label" (
   "id" SERIAL PRIMARY KEY,
@@ -87,13 +88,6 @@ CREATE TABLE "etablissement_label" (
   UNIQUE ("etablissement_id", "user_id", "label_id")
 );
 
-
-----------
-
--- CREATE ASSERTION partial CHECK (
---     NOT EXISTS (SELECT
---                   hotel.etablissement_id as hid,
---                   bar.etablissement_id as bid,
---                   restaurant.etablissement_id as rid,
---                 FROM hotel, bar, restaurant
---                 WHERE hid=bid OR bid=rid OR rid=hid))
+CREATE INDEX ON "etablissement_label" (etablissement_id);
+CREATE INDEX ON "etablissement_label" (user_id);
+CREATE INDEX ON "etablissement_label" (label_id);

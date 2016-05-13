@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Je veux contribuer{% endblock %}
+
+{% block content %}
+{% for admin in admins %}
+{{admin.username}}
+{% endfor %}
+</br>
+{% for e in etablissements %}
+{{e.name}}
+{% endfor %}
+{% endblock %}
