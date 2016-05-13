@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}{{e.name}}{% endblock %}
 
 {% block header %}
     <div style="position: relative;">
@@ -15,6 +15,14 @@
         <a href="/delete/{{e.id}}" class="btn btn-danger">Supprimer</a>
         <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning">Editer</a>
 {% endif %}
+
+
+{% for tag in tags %}
+    {{tag['label.name']}}
+    {% if tag['was_tagged_by_user'] %}
+        X
+    {% endif %}
+{% endfor %}
 
 {% block speciation %}{% endblock %}
 

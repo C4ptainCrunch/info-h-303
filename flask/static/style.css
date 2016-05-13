@@ -7,6 +7,7 @@ body {
     background-color: #2d5be3;
     border-radius: 0;
     color: #ffffff;
+    border: none;
     border-top: 1.5em solid rgb(7, 50, 162);
     font-weight: 600;
     font-size: 13px;

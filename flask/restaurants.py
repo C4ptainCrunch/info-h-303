@@ -8,6 +8,7 @@ import config
 import models
 from datetime import datetime
 import statistics
+import etablissement
 
 from ressources import *
 
@@ -77,8 +78,15 @@ def show_restaurant(etablissement_id):
         return  abort(404)
 
     restaurant = models.Restaurant.from_dict(data)
+    tags = etablissement.get_labels(etablissement_id, g.user.id)
 
-    return render_template('view_restaurant.html', restaurant=restaurant, e=restaurant.etablissement)
+
+    return render_template(
+        'view_restaurant.html',
+        restaurant=restaurant,
+        e=restaurant.etablissement,
+        tags=tags
+    )
 
 @restaurants_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
 @admin_required
@@ -89,7 +97,7 @@ def edit_restaurant(etablissement_id):
     JOIN users ON etablissement.user_id = users.id
     WHERE restaurant.etablissement_id=%s AND etablissement.type='restaurant'
     """.format(models.Etablissement.star(), models.User.star(), models.Restaurant.star())
-    
+
     g.cursor.execute(query, [etablissement_id])
     data = g.cursor.fetchone()
     restaurant = models.Restaurant.from_dict(data)

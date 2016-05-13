@@ -8,6 +8,7 @@ import config
 import models
 from datetime import datetime
 import statistics
+import etablissement
 
 from ressources import *
 
@@ -65,8 +66,9 @@ def show_bar(etablissement_id):
         return  abort(404)
 
     bar = models.Bar.from_dict(data)
+    tags = etablissement.get_labels(etablissement_id, g.user.id)
 
-    return render_template('view_bar.html', bar=bar, e=bar.etablissement)
+    return render_template('view_bar.html', bar=bar, e=bar.etablissement, tags=tags)
 
 @bars_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
 @admin_required

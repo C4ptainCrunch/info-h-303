@@ -8,6 +8,7 @@ import config
 import models
 from datetime import datetime
 import statistics
+import etablissement
 
 from ressources import *
 
@@ -28,6 +29,7 @@ def list_hotels():
         hotel = models.Hotel.from_dict(row)
         score = row["score"]
         hotels.append((hotel, score))
+
     return render_template("list_hotels.html", etablissements=hotels)
 
 @hotels_api.route("/add", methods=['GET', 'POST'])
@@ -64,8 +66,9 @@ def show_hotel(etablissement_id):
         return  abort(404)
 
     hotel = models.Hotel.from_dict(data)
+    tags = etablissement.get_labels(etablissement_id, g.user.id)
 
-    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement)
+    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement, tags=tags)
 
 @hotels_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
 @admin_required
