@@ -68,7 +68,13 @@ app.register_blueprint(comment_api, url_prefix='/comment')
 
 @app.route("/")
 def index():
-    query = "SELECT etablissement.*, AVG(comment.score) AS score FROM etablissement LEFT JOIN comment ON etablissement.id = comment.etablissement_id GROUP BY etablissement.id ORDER BY AVG(comment.score) DESC NULLS LAST"
+    query = """
+    SELECT etablissement.*, AVG(comment.score) AS score FROM etablissement 
+    JOIN comment ON etablissement.id = comment.etablissement_id 
+    GROUP BY etablissement.id 
+    HAVING COUNT(*) >=3 
+    ORDER BY avg(score);
+    """
     g.cursor.execute(query)
     rows = g.cursor.fetchall()
     etablissements = []
@@ -77,7 +83,7 @@ def index():
         e = models.Etablissement.from_dict(row)
         etablissements.append((e, avg))
 
-    return render_template('index.html', top5=etablissements[:5])
+    return render_template('index.html', top5=etablissements)
 
 
 @app.route("/search")
