@@ -9,7 +9,7 @@ import models
 from datetime import datetime
 import statistics
 import humanize
-from datetime import date
+from datetime import date, timedelta
 
 from ressources import *
 
@@ -139,7 +139,11 @@ def get_etablissement(pk):
 @app.template_filter('humanize_date')
 def humanize_date(d):
     humanize.i18n.activate('fr')
-    return humanize.naturaltime(date.today() - d)
+    diff = date.today() - d
+    if(diff < timedelta(hours=24)):
+        return "aujourd'hui"
+
+    return humanize.naturaltime(diff)
 
 
 if __name__ == "__main__":
