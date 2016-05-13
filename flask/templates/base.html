@@ -15,44 +15,9 @@
 
   </head>
   <body>
-    <nav class="navbar">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">
-            FOURTRIANGLE
-          </a>
-        </div>
-        <div class="collapse navbar-collapse" id=bs-example-navbar-collapse-1>
-          <ul class="nav navbar-nav">
-            <li><a href="/hotels">Hotels</a></li>
-            <li><a href="/bars">Bars</a></li>
-            <li><a href="/restaurants">Restaurants</a></li>
-          </ul>
-
-          <form class="navbar-form navbar-left" role="search" method="GET" action="/search">
-            <div class="form-group">
-              <input type="text" class="form-control" name="term" placeholder="Je cherche...">
-            </div>
-            <button type="submit" class="btn btn-success"><i class="fa fa-search" ></i></button>
-          </form>
-
-          <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated() %}
-              <li><a href="/users/{{user.id}}">
-                <i class="fa fa-user"></i> {{user.username}}
-              </a></li>
-              <li><a href="/users/logout">
-                <i class="fa fa-sign-out" ></i> Déconnexion
-              </a></li>
-            {% else %}
-              <a class="btn btn-default navbar-btn login-button" href="/users/login">Se connecter</a>
-              <a class="btn btn-default navbar-btn signup-button" href="/users/register">S'inscrire</a>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
-    </nav>
+  {% include "nav.html" %}
     {% block fullpage %}
+      {% block header %}{% endblock %}
       <div class="container">
           {% block content %}
           {% endblock %}

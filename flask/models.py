@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import g, abort
 from werkzeug import secure_filename
 import os
+import urllib, hashlib
 
 class Model:
 
@@ -93,6 +94,11 @@ class User(Model):
     def is_authenticated(self):
         return True
 
+    def gravatar(self):
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode('utf-8')).hexdigest() + "?"
+        gravatar_url += urllib.parse.urlencode({'d':'wavatar', 's':str(100)})
+        return gravatar_url
+
     class Meta:
         fields = ['id', "username", "email", "password", "created", "is_admin"]
         auto_fields = ['id']
@@ -108,6 +114,11 @@ class AnonymousUser:
     @property
     def is_admin(self):
         return False
+
+    @property
+    def id(self):
+        return -1
+
 
 
 class Etablissement(Model):
@@ -159,6 +170,29 @@ class Etablissement(Model):
             secure = secure_filename(image.filename)
             open('static/media/' + secure, 'wb').write(image_data)
             self.picture = '/static/media/' + secure
+
+    def get_picture(self):
+        if self.picture:
+            return self.picture
+
+        if self.type == 'hotel':
+            return "/static/default-hotel.jpg"
+
+        if self.type == 'bar':
+            return "/static/default-bar.jpg"
+
+        if self.type == 'restaurant':
+            return "/static/default-restaurant.jpg"
+
+    def get_url(self):
+        if self.type == 'hotel':
+            return "/hotels/" + str(self.id)
+
+        if self.type == 'bar':
+            return "/bars/" + str(self.id)
+
+        if self.type == 'restaurant':
+            return "/restaurants/" + str(self.id)
 
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]
@@ -225,4 +259,8 @@ def get_or_404(query, params, model):
 def list_of(query, params, model):
     g.cursor.execute(query, params)
     rows = g.cursor.fetchall()
-    return [model.from_dict(r) for r in rows]
+    def map_to_model(r):
+        m = model.from_dict(r)
+        m.extra = r
+        return m
+    return [map_to_model(r) for r in rows]

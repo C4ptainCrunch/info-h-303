@@ -10,7 +10,7 @@ list_of_days = ['Lu am', 'Lu pm', "Ma am", 'Ma pm', 'Me am', 'Me pm', "Je am", "
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(html_tag="ul",prefix_label=False)
     option_widget = widgets.CheckboxInput()
-    
+
     def validate(self, *args, **kwargs):
         return True
 
@@ -43,7 +43,7 @@ class Bar(Form):
     etablissement = FormField(Etablissement)
     smoker = BooleanField("Fumeur")
     food = BooleanField("Petite restauration")
-    
+
     submit = SubmitField("Envoyer")
 
 class Restaurant(Form):
@@ -51,7 +51,7 @@ class Restaurant(Form):
     price_range = IntegerField("Prix d'un repas", validators=[validators.NumberRange(min=0)])
     max_seats = IntegerField("Nombre de places", validators=[validators.NumberRange(min=0)])
     takeaway = BooleanField("À emporter")
-    delivery = BooleanField("Livre à domicile")   
+    delivery = BooleanField("Livre à domicile")
 
     days = [(x, x) for x in list_of_days]
     openings = MultiCheckboxField("Jours d'ouverture", choices=days)
@@ -72,5 +72,21 @@ class User(Form):
         validators.EqualTo('confirm', message='Les mots de passe doivent être identiques')
     ])
     confirm = PasswordField('Mot de passe (à nouveau)')
+
+    submit = SubmitField("Envoyer")
+
+class PasswordUser(Form):
+    password = PasswordField('Mot de passe', [
+        validators.Required(),
+        validators.EqualTo('confirm', message='Les mots de passe doivent être identiques')
+    ])
+    confirm = PasswordField('Mot de passe (à nouveau)')
+
+    submit = SubmitField("Envoyer")
+
+
+class EditUser(Form):
+    username = TextField("Nom d'utilisateur")
+    email = EmailField("Adresse mail")
 
     submit = SubmitField("Envoyer")

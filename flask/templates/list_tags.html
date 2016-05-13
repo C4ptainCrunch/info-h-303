@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Tags{% endblock %}
+{% block content %}
+
+{% if user.is_admin %}
+        <a href="/tags/add" class="btn btn-success">Ajouter un tag</a>
+{% endif %}
+
+Tags populaires : R5 (avec ancres)
+
+{% for ((tag, tag_id), etablissements) in tags %}
+    <h1>
+        {{tag}}
+        {% if user.is_admin %}
+            <a href="/tags/{{tag_id}}/edit">Editer</a>
+            <a href="/tags/{{tag_id}}/delete">Supprimer</a>
+        {% endif %}
+    </h1>
+    {% for (etablissement, tag_cout) in etablissements %}
+        <a href="{{etablissement.get_url()}}">{{etablissement.name}}</a> ({{tag_cout}})
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

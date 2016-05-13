@@ -61,10 +61,94 @@ def register():
 def profile(pk):
     query = "SELECT * FROM users WHERE id=%s"
     user = models.get_or_404(query, [pk], models.User)
-    return render_template('profile.html', profile=user)
+
+    related_query = """
+    SELECT {} FROM users WHERE users.id !=%s AND users.id IN (
+        SELECT user_id FROM comment WHERE etablissement_id
+            IN (
+                SELECT etablissement_id FROM comment WHERE
+                    user_id=(SELECT id FROM users WHERE id=%s)
+                    AND score > 3
+            )
+            AND score > 3
+            GROUP BY user_id
+            HAVING COUNT(*) >= 3
+    )"""
+    related = models.list_of(related_query.format(models.User.star()), [pk, pk], models.User)
+
+    tags_query = """
+    SELECT {}, {} FROM etablissement_label
+        JOIN etablissement ON etablissement_label.etablissement_id=etablissement.id
+        JOIN label ON label.id=etablissement_label.label_id
+        WHERE etablissement_label.user_id=%s
+    """.format(models.Label.star(), models.Etablissement.star())
+    g.cursor.execute(tags_query, [pk])
+    tags = g.cursor.fetchall()
+    # raise
+    return render_template('view_user.html', profile=user, related=related, tags=tags)
+
+@users_api.route("/<int:pk>/set_admin")
+@admin_required
+def set_admin(pk):
+    query = "SELECT * FROM users WHERE id=%s"
+    user = models.get_or_404(query, [pk], models.User)
+    user.is_admin = True
+    user.update()
+    return redirect("/users/" + str(user.id))
+
+@users_api.route("/<int:pk>/unset_admin")
+@admin_required
+def unset_admin(pk):
+    if pk == g.user.id:
+        return abort(401)
+    query = "SELECT * FROM users WHERE id=%s"
+    user = models.get_or_404(query, [pk], models.User)
+    user.is_admin = False
+    user.update()
+    return redirect("/users/" + str(user.id))
+
+
+@users_api.route("/<int:pk>/edit", methods=['GET', 'POST'])
+@auth_required
+def edit(pk):
+    if not g.user.is_admin and g.user.id != pk:
+        return abort(401)
+    query = "SELECT * FROM users WHERE id=%s"
+    user = models.get_or_404(query, [pk], models.User)
+
+    form = forms.EditUser(request.form, obj=user)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(user)
+
+        user.update()
+        return redirect("/users/" + str(user.id))
+
+    return render_template('edit_user.html', form=form)
+
+@users_api.route("/password", methods=['GET', 'POST'])
+@auth_required
+def password():
+    form = forms.PasswordUser(request.form)
+    if request.method == 'POST' and form.validate():
+        query = "SELECT * FROM users WHERE id=%s"
+        user = models.get_or_404(query, [g.user.id], models.User)
+        user.password = crypt(form.password.data, "s3c3tS4lT")
+        user.update()
+
+        return redirect("/users/" + str(user.id))
+
+    return render_template('edit_user.html', form=form)
+
 
 @users_api.route("/logout")
 def logout():
     if "user_id" in session:
         del session['user_id']
     return redirect(url_for('index'))
+
+@users_api.route("/")
+def list_users():
+    query = "SELECT {} FROM users ORDER BY users.id DESC".format(models.User.star())
+    users = models.list_of(query, [], models.User)
+
+    return render_template('list_users.html', users=users)

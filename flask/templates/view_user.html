@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Profil de {{profile.username}}{% endblock %}
+{% block content %}
+
+<h1>
+    Profil de {{profile.username}}
+</h1>
+<img src="{{profile.gravatar()}}">
+{% if profile.is_admin %}
+    <span class="label label-success">Administrateur</span>
+{% endif %}
+{% if user.is_admin %}
+    {% if profile.id != user.id %}
+        {% if profile.is_admin %}
+            <a href="/users/{{profile.id}}/unset_admin">Dégrader</a>
+        {% else %}
+            <a href="/users/{{profile.id}}/set_admin">Promouvoir</a>
+        {% endif%}
+    {% endif %}
+{% endif%}
+
+{% if profile.id == user.id %}
+    <a href="/users/{{profile.id}}/edit">Editer mon profil</a>
+    <a href="/users/password">Changer mon mot de passe</a>
+{% elif user.is_admin %}
+    <a href="/users/{{profile.id}}/edit">Editer</a>
+{% endif %}
+
+{% if related %}
+    <h1>Utilisateurs semblables</h1>
+    {% for u in related %}
+        <h1>
+            <a href="/users/{{u.id}}">{{u.username}}</a>
+            <small>
+                {% if u.is_admin %}
+                    <span class="label label-success">Administrateur</span>
+                {% endif %}
+            </small>
+        </h1>
+    {% endfor %}
+{% endif%}
+
+{% if tags %}
+    <h1>Tags de cet utilisateur</h1>
+    {% for tag in tags %}
+        <span class="label label-success">{{tag['label.name']}}</span>
+        sur <a href="/etablissements/{{tag['etablissement.id']}}">{{tag['etablissement.name']}}</a><br>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

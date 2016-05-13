@@ -1,5 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}{{e.name}}{% endblock %}
+
+{% block header %}
+    <div style="position: relative;">
+        <img src="{{e.get_picture()}}" style="object-position: 50% 80%; position: relative;  top: -1.4em; height: 20vh; max-height: 12em;object-fit: cover; width: 100%">
+        <h1 style="font-size: 4em; position: absolute; top: 0.1em; text-align: center; width:100%;overflow: hidden; height: 1em;">{{e.name}}</h1>
+    </div>
+{% endblock %}
+
 {% block content %}
 
 <h1>{{e.name}} <small>par {{e.user.username}}</small></h1>
@@ -8,12 +16,17 @@
         <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning">Editer</a>
 {% endif %}
 
-{% if e.picture %}
-    <img src="{{e.picture}}" >
-{% endif %}
+    <h3>Tags</h3>
+{% for tag in tags %}
+    <span class="label label-success">
+        {{tag['label.name']}}
+        {% if tag['was_tagged_by_user'] %}
+            &nbsp;<a href="/tags/remove/{{e.id}}/{{tag['label.id']}}"><i class="fa fa-times" aria-hidden="true"></i></a>
+        {% endif %}
+    </span>&nbsp;
+{% endfor %}
+<span class="label label-info"><a href="/tags/add/{{e.id}}">Ajouter <i class="fa fa-plus" aria-hidden="true"></i></a></span>
 
-{% block speciation %}
-
-{% endblock %}
+{% block speciation %}{% endblock %}
 
 {% endblock %}

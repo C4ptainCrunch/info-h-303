@@ -15,6 +15,7 @@ from hotels import hotels_api
 from bars import bars_api
 from restaurants import restaurants_api
 from users import users_api
+from tags import tags_api
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -58,6 +59,7 @@ app.register_blueprint(hotels_api, url_prefix='/hotels')
 app.register_blueprint(bars_api, url_prefix='/bars')
 app.register_blueprint(restaurants_api, url_prefix='/restaurants')
 app.register_blueprint(users_api, url_prefix='/users')
+app.register_blueprint(tags_api, url_prefix='/tags')
 
 @app.route("/")
 def index():
@@ -122,6 +124,14 @@ def api_all():
     return Response(response=json.dumps(l),
                     status=200,
                     mimetype="application/json")
+
+
+@app.route("/etablissements/<int:pk>")
+def get_etablissement(pk):
+    query = "SELECT {} FROM etablissement WHERE id=%s".format(models.Etablissement.star())
+    e = models.get_or_404(query, [pk], models.Etablissement)
+
+    return redirect("/{}s/{}".format(e.type, e.id))
 
 
 if __name__ == "__main__":
