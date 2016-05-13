@@ -1,6 +1,17 @@
 {% extends "view_etablissement.html" %}
 {% block speciation %}
 
-<h3>{{hotel.stars}} étoiles</h3>
+
+{% for _ in range(hotel.stars) %}
+    <i class="fa fa-star fa-2x" style="color: rgb(245, 190, 0)" aria-hidden="true"></i>
+{% endfor %}
+{% for _ in range(5 - hotel.stars) %}
+    <i class="fa fa-star-o fa-2x" style="color: grey" aria-hidden="true"></i>
+{% endfor %}
+
+<h4>Prix d'une chambre double</h4>
+<p> {{hotel.price}} €</p>
+
+<p>Cet hotel comporte {{hotel.rooms}} chambres</p>
 
 {% endblock %}

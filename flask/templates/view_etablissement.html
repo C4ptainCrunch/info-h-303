@@ -22,8 +22,6 @@
             {% endif %}
             {{e.name}}
         </h1>
-        {% block speciation %}{% endblock %}
-
         <h2>Commentaires</h2>
         {% for comment in comments %}
             <div class="panel panel-default">
@@ -74,6 +72,8 @@
                 <h3 class="panel-title">Informations</h3>
             </div>
             <div class="panel-body">
+                {% block speciation %}{% endblock %}
+                <hr>
                 <h4>Téléphone</h4>
                 <p>
                     <i class="fa fa-phone" aria-hidden="true"></i>

@@ -1,6 +1,26 @@
 {% extends "view_etablissement.html" %}
 {% block speciation %}
 
-<h3>Ceci est un bar</h3>
+{% if bar.food %}
+    <p>
+        <i class="fa fa-cutlery" aria-hidden="true"></i>
+        {{e.name}} propose de la petite restauration.
+     </p>
+{% endif %}
+{% if bar.smoker %}
+    <p>
+        <i class="fa fa-fire" aria-hidden="true"></i>
+        Ce bar est fumeur.
+    </p>
+{% else %}
+    <p>
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-fire fa-stack-1x" aria-hidden="true"></i>
+            <i class="fa fa-ban fa-stack-2x text-danger"></i>
+        </span>
+
+        Ce bar est non-fumeur.
+    </p>
+{% endif %}
 
 {% endblock %}
