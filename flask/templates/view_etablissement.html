@@ -40,6 +40,18 @@
                 <div class="panel-body">
                     <p>{{comment.text|markdown}}</p>
                 </div>
+                {% if comment.user_id == user.id or user.is_admin %}
+                    <div class="panel-footer">
+                        <a class="btn btn-warning btn-xs" href="/comment/edit/{{comment.id}}">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            Editer
+                        </a>
+                        <a class="btn btn-danger btn-xs" href="/comment/delete/{{comment.id}}">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            Supprimer
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         {% else %}
             <p class="text-muted">Il n'y a pas de commentaires pour l'instant...</p>
