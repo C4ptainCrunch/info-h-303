@@ -1,6 +1,52 @@
 {% extends "view_etablissement.html" %}
 {% block speciation %}
 
-<h3>Resto</h3>
+<p>Indicateur de prix : {{restaurant.price_range}} €</p>
+<p>{{e.name}} dispose de {{restaurant.max_seats}} places.</p>
+
+{% if restaurant.takeaway %}
+    <p>Takeaway possible.</p>
+{% endif %}
+
+{% if restaurant.delivery %}
+    <p>Livraison possible.</p>
+{% endif %}
+
+<h4>Ouverture</h4>
+<table class="table table-condensed table-bordered text-center">
+    <tr>
+        {% for day in ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"] %}
+            <td class="info">{{day}}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for i in range(0,14,2) %}
+            {% if restaurant.openings[i] %}
+                <td class="success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </td>
+            {% else %}
+                <td class="danger">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for i in range(1, 14, 2) %}
+            {% if restaurant.openings[i] %}
+                <td class="success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </td>
+            {% else %}
+                <td class="danger">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+</table>
+
+
 
 {% endblock %}
