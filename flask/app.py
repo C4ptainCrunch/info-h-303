@@ -16,6 +16,7 @@ from bars import bars_api
 from restaurants import restaurants_api
 from users import users_api
 from tags import tags_api
+from comment import comment_api
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -60,6 +61,7 @@ app.register_blueprint(bars_api, url_prefix='/bars')
 app.register_blueprint(restaurants_api, url_prefix='/restaurants')
 app.register_blueprint(users_api, url_prefix='/users')
 app.register_blueprint(tags_api, url_prefix='/tags')
+app.register_blueprint(comment_api, url_prefix='/comment')
 
 @app.route("/")
 def index():

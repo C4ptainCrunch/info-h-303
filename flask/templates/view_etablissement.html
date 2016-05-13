@@ -29,6 +29,8 @@
 
 {% block speciation %}{% endblock %}
 
+{% import "bootstrap/wtf.html" as wtf %}
+{{wtf.quick_form(commentForm, action="/comment/add/"+e.id|string+"/"+user.id|string)}}
 {% for comment in comments %}
     <h4>{{comment.user.username}} a attribué la note de {{comment.score}}</h4>
     <p>{{comment.text}}</p>

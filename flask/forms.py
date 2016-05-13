@@ -90,3 +90,8 @@ class EditUser(Form):
     email = EmailField("Adresse mail")
 
     submit = SubmitField("Envoyer")
+
+class Comment(Form):
+    score = IntegerField("Score", validators=[validators.NumberRange(min=0, max=5)])
+    text = TextAreaField("Commentaire")
+    submit = SubmitField("Envoyer")
