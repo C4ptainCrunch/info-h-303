@@ -17,6 +17,7 @@
 \usepackage{listings}
 
 
+
 \def\ojoin{\setbox0=\hbox{$\bowtie$}%
   \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
 \def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
@@ -237,6 +238,7 @@ Nous avons décidé que les suppressions dans la base de donnée devraient résu
 La seule entorse à cette règle a été pour les administrateurs. Si un administrateur ne peut être supprimé si il a des établissements (\texttt{ON DELETE RESTRICT}).
 
 \subsection{Script d'insertion des données}
+\lstinputlisting[language=python]{../flask/datas/loadxml.py}
 
 \subsection{Modèles}
 

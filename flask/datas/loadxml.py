@@ -41,7 +41,7 @@ def tag(tags, etablissement_id):
             try:
                 cursor.execute(sql, [etablissement_id, user_id, label_id])
             except IntegrityError as e:
-                print("Erreur à l'ajout de label: ", e)
+                print("Erreur a l'ajout de label: ", e)
 
 def comment(comments, etablissement_id):
     sql = """INSERT INTO "comment" (user_id,etablissement_id,date,score,text) VALUES (%s,%s,%s,%s,%s)"""
