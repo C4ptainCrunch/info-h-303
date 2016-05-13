@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash, jsonify, json, Response
+from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash, jsonify, json, Response, Markup
 from functools import wraps
 import psycopg2
 import psycopg2.extras
@@ -10,6 +10,7 @@ from datetime import datetime
 import statistics
 import humanize
 from datetime import date, timedelta
+import markdown
 
 from ressources import *
 
@@ -145,6 +146,9 @@ def humanize_date(d):
 
     return humanize.naturaltime(diff)
 
+@app.template_filter('markdown')
+def markdown_f(string):
+    return Markup(markdown.markdown(string))
 
 if __name__ == "__main__":
     app.run(debug=config.DEBUG)
