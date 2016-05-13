@@ -15,7 +15,7 @@ from ressources import *
 comment_api = Blueprint('comment_api', __name__)
 
 @comment_api.route("/add/<int:epk>/<int:uid>", methods=["POST"])
-@admin_required
+@auth_required
 def add_comment(epk, uid):
     form = forms.Comment(request.form)
     if request.method == 'POST' and form.validate():
