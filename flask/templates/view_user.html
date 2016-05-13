@@ -19,6 +19,13 @@
     {% endif %}
 {% endif%}
 
+{% if profile.id == user.id %}
+    <a href="/users/{{profile.id}}/edit">Editer mon profil</a>
+    <a href="/users/password">Changer mon mot de passe</a>
+{% elif user.is_admin %}
+    <a href="/users/{{profile.id}}/edit">Editer</a>
+{% endif %}
+
 {% if related %}
     <h1>Utilisateurs semblables</h1>
     {% for u in related %}

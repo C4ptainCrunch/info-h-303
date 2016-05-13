@@ -76,7 +76,7 @@ def profile(pk):
     )"""
     related = models.list_of(related_query.format(models.User.star()), [pk, pk], models.User)
 
-    return render_template('profile.html', profile=user, related=related)
+    return render_template('view_user.html', profile=user, related=related)
 
 @users_api.route("/<int:pk>/set_admin")
 @admin_required
@@ -97,6 +97,38 @@ def unset_admin(pk):
     user.is_admin = False
     user.update()
     return redirect("/users/" + str(user.id))
+
+
+@users_api.route("/<int:pk>/edit", methods=['GET', 'POST'])
+@auth_required
+def edit(pk):
+    if not g.user.is_admin and g.user.id != pk:
+        return abort(401)
+    query = "SELECT * FROM users WHERE id=%s"
+    user = models.get_or_404(query, [pk], models.User)
+
+    form = forms.EditUser(request.form, obj=user)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(user)
+
+        user.update()
+        return redirect("/users/" + str(user.id))
+
+    return render_template('edit_user.html', form=form)
+
+@users_api.route("/password", methods=['GET', 'POST'])
+@auth_required
+def password():
+    form = forms.PasswordUser(request.form)
+    if request.method == 'POST' and form.validate():
+        query = "SELECT * FROM users WHERE id=%s"
+        user = models.get_or_404(query, [g.user.id], models.User)
+        user.password = crypt(form.password.data, "s3c3tS4lT")
+        user.update()
+
+        return redirect("/users/" + str(user.id))
+
+    return render_template('edit_user.html', form=form)
 
 
 @users_api.route("/logout")

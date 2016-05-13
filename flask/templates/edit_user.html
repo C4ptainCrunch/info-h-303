@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Edition du profil{% endblock %}
+{% block content %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+    {{wtf.quick_form(form,  button_map={"Ok":'default'})}}
+
+{% endblock %}
