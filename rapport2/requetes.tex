@@ -1,6 +1,6 @@
 
-\section{R1}
-\subsection{AR:}
+\subsection{Tous les utilisateurs qui apprécient au moins 3 établissements que l’utilisateur "Brenda" apprécie}
+\subsubsection{Algèbre relationnelle}
 \(
 BC(C_1, C_2, C_3) \leftarrow \pi_{C_1.eid, C_2.eid, C_3.eid} (((C_1 \join_{C_1.id != C_2.id \land C_1.score > 3 \land C_2.score>3} C_2)\\
 \join_{C_1.id != C_3.id \land C_2.id != C3.id \land C_3.score>3}) \join_{C_1.uid = U.id \land C_2.uid = U.id \land C_3.uid = U.id}(\sigma_{U.username = "Brenda"}(U)))
@@ -15,7 +15,7 @@ AC(uid, C_1, C_2, C_3) \leftarrow \pi_{U.id, C_1.eid, C_2.eid, C_3.eid} (((C_1 \
 \pi_{AC.uid}(BC \join_{BC.C_1 = AC.C_1 \land BC.C_2 = AC.C_2 \land BC.C_3 = AC.C_3} AC)
 \)
 
-\subsection{TC}
+\subsubsection{Calcul relationnel}
 \(
 \{
 u|users(u) \land \exists b(users(b) \land b.username="Brenda") \land u.id \neq b.id
@@ -27,9 +27,24 @@ u|users(u) \land \exists b(users(b) \land b.username="Brenda") \land u.id \neq b
 \exists e_3(etablissement(e_3) \land e_1 \neq e_3 \land e_2 \neq e_3 \land \exists c_5 \exists c_6(comment(c_5)\land comment(c_6) \land c_5.uid = u.id \land c_5.score > 3 \land c_6.uid = b.uid \land c_6.score >3))
 \}
 \)
+\subsubsection{SQL}
+\begin{lstlisting}
+SELECT users.* FROM users
+WHERE users.username !="Brenda" AND users.id IN (
+    SELECT user_id FROM comment WHERE etablissement_id
+    IN (
+        SELECT etablissement_id FROM comment WHERE
+            user_id=(SELECT id FROM users WHERE username="Brenda")
+            AND score > 3
+    )
+    AND score > 3
+    GROUP BY user_id
+    HAVING COUNT(*) >= 3
+);
+\end{lstlisting}
 
-\section{R2}
-\subsection{AR}
+\subsection{Tous les établissements qu’apprécie au moins un utilisateur qui apprécie tous les établissements que "Brenda" apprécie}
+\subsubsection{Algèbre relationnelle}
 \(
 AC \leftarrow \pi_{C.uid, C.eid}(\sigma_{C.score>3}(C))
 \\
@@ -40,32 +55,88 @@ U \leftarrow  \pi_{AC.uid}(AC \div BC)
 \pi_{C.eid}(\sigma_{C.uid = U.uid \land C.score>3}(C))
 \)
 
-\subsection{TC}
+\subsubsection{Calcul relationnel}
 \(
 \{
 e|etablissement(e) \land \exists c(comment(c) \land c.score>3 \land c.eid = e.id \land \exists u(users(u) \land c.uid = u.id \land \forall f \forall b(comment(f) \land users(b) \land f.uid = b.uid\land b.username="Brenda" \land f.score > 3 \rightarrow \exists a(comment(a)\land a.uid = u.id \land f.eid = a.eid\land a.score > 3)))))
 \}
 \)
+\subsubsection{SQL}
+\begin{lstlisting}
+SELECT etablissement.* FROM comment
+JOIN etablissement ON comment.etablissement_id=etablissement.id AND comment.score > 3
+WHERE comment.user_id IN (
+    SELECT u.id FROM etablissement
+    JOIN comment ON etablissement.id = comment.etablissement_id
+    JOIN users ON comment.user_id = users.id
+    JOIN comment AS c ON etablissement.id = c.etablissement_id
+    JOIN users AS u ON c.user_id = u.id
+    WHERE users.username = "Brenda" AND comment.score >= 4 AND u.username !="Brenda"
+    GROUP BY u.id HAVING BOOL_AND(c.score >= 4)
+) GROUP BY etablissement.id;
+\end{lstlisting}
 
-\section{R3}
-\subsection{AR}
+\subsection{Tous les établissements pour lesquels il y a au plus un commentaire}
+\subsubsection{Algèbre relationnelle}
 \(
 Ew2C \leftarrow \pi_{C_1.eid, C_1.id}(C_1 \join_{C_1.eid=C_2.eid \land C_1.id != C_2.id})
 \\
 \pi_{E.id}(\pi_{E.id, C.id}(E \leftouterjoin_{E.id=C.eid}  C) - EW2C)
 \)
-\subsection{TC}
+\subsubsection{Calcul relationnel}
 
 \(
 \{e | etablissement(e) \land \exists c(comment(c) \land c.eid = e.id) \rightarrow \neg\exists d(comment(d) \land d.eid = e.id \land d.id \neq c.id)\}
 \)
+\subsubsection{SQL}
+\begin{lstlisting}
+SELECT etablissement.* FROM etablissement
+LEFT JOIN comment ON etablissement.id = comment.etablissement_id
+GROUP BY etablissement.id
+HAVING COUNT(*) <= 1;
+\end{lstlisting}
 
-\section{R4}
-\subsection{AR}
+\subsection{La liste des administrateurs n’ayant pas commenté tous les établissements qu’ils ont crées}
+\subsubsection{Algèbre relationnelle}
 \(
 \pi_{E.uid}(E) - \pi_{E.id}(E\join_{E.id = C.id \land E.uid = C.uid}C)
 \)
-\subsection{TC}
+\subsubsection{Calcul relationnel}
 \(
 \{e.uid|etablissement(e)\land \neg \exists c(comment(c) \land c.uid = e.uid \land c.eid = e.id)\}
 \)
+\subsubsection{SQL}
+\begin{lstlisting}
+SELECT users.* FROM users 
+WHERE users.id IN (
+    SELECT etablissement.user_id FROM etablissement 
+    LEFT JOIN comment ON etablissement.id = comment.etablissement_id 
+    GROUP BY etablissement.id 
+    HAVING BOOL_AND(comment.user_id IS NULL OR comment.user_id != etablissement.user_id)
+);
+\end{lstlisting}
+
+\subsection{La liste des établissements ayant au minimum trois commentaires, classée selon la moyenne des scores attribués}
+\subsubsection{SQL}
+\begin{lstlisting}
+SELECT etablissement.*, AVG(comment.score) AS score FROM etablissement 
+JOIN comment ON etablissement.id = comment.etablissement_id 
+GROUP BY etablissement.id 
+HAVING COUNT(*) >=3 
+ORDER BY avg(score);
+\end{lstlisting}
+
+\subsection{La liste des labels étant appliqués à au moins 5 établissements, classée selon la moyenne des scores des établissements ayant ce label}
+\subsubsection{SQL}
+\begin{lstlisting}
+SELECT label.* FROM label 
+FULL JOIN (
+    SELECT etablissement_label.label_id AS id, AVG(comment.score) AS score FROM etablissement_label 
+    LEFT JOIN etablissement ON etablissement_label.etablissement_id = etablissement.id 
+    FULL JOIN comment ON etablissement.id = comment.etablissement_id 
+    GROUP BY etablissement_label.label_id, etablissement.id
+) l ON label.id = l.id 
+GROUP BY label.id 
+HAVING COUNT(*) >= 5 
+ORDER BY AVG(l.score);
+\end{lstlisting}
