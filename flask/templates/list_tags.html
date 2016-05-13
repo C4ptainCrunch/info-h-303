@@ -3,7 +3,8 @@
 {% block content %}
 
 {% if user.is_admin %}
-        <a href="/tags/add" class="btn btn-success">Ajouter un tag</a>
+    {% import "bootstrap/wtf.html" as wtf %}
+    {{wtf.quick_form(form, action="/tags/create")}}
 {% endif %}
 
 Tags populaires : R5 (avec ancres)

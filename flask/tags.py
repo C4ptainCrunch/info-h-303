@@ -29,7 +29,7 @@ def list_tags():
     rows = g.cursor.fetchall()
     tags = itertools.groupby(rows, key=lambda x: (x['label.name'], x['label.id']))
     tags = [(group, [(models.Etablissement.from_dict(e), e['tag_count']) for e in data]) for group, data in tags]
-    return render_template("list_tags.html", tags=tags)
+    return render_template("list_tags.html", tags=tags, form=forms.Label())
 
 @tags_api.route("/add/<int:epk>", methods=['GET', 'POST'])
 @auth_required
@@ -81,7 +81,7 @@ def create():
 
     return redirect(url_for('.list_tags'))
 
-@tags_api.route("/edit/<int:tid>", methods=["POST", "GET"])
+@tags_api.route("/<int:tid>/edit", methods=["POST", "GET"])
 @admin_required
 def edit_tag(tid):
     query = """
@@ -102,3 +102,24 @@ def edit_tag(tid):
         return redirect(url_for('.list_tags'))
 
     return render_template('edit_label.html', form=form)
+
+@tags_api.route("/<int:tid>/delete")
+@admin_required
+def delete(tid):
+    queryGet = """
+    SELECT {} FROM label
+    WHERE label.id=%s
+    """.format(models.Label.star())
+    queryDel = """
+    DELETE FROM label
+    WHERE id=%s
+    """
+
+    g.cursor.execute(queryGet, [tid])
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+    label = models.Label.from_dict(data)
+
+    g.cursor.execute(queryDel, [tid])
+    return redirect(url_for('.list_tags'))
