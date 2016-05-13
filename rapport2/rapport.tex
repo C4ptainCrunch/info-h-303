@@ -195,6 +195,12 @@ Nous avons rapidement écarté \textbf{SQLite} car celui-ci ne permet pas d'acc�
 
 Notre choix s'est porté sur \textbf{Postgresql} plutôt que \textbf{MySQL} car le premier est un des moteurs les plus complets, puissants et rapides du marché. De plus, il permet, contrairement à MySQL, d'ajouter des contraintes et il supporte les \textit{ARRAY}.
 
+\subsubsection{Contraintes}
+
+\subsubsection{Indexes}
+
+\subsubsection{\texttt{ON DELETE}}
+
 \subsection{Script d'insertion des données}
 
 \subsection{Modèles}
@@ -237,12 +243,33 @@ De plus, les utilisateurs ont aussi une photo sur leur profil. Pour cela, nous u
 
 \subsection{Recherche \textit{fuzzy}}
 
+La recherche d'établissement est effectuée sur le champ ``nom'' mais n'attend pas une correspondance exacte (comme un \texttt{WHERE ==} ou un \texttt{LIKE}) mais effectue une recherche basée sur la similarité entre les deux chaînes. Ceci permet à l'utilisateur de faire des fautes d'orthographe et de quand même trouver ce qu'il cherche.
+
+De plus, si un seul résultat est trouvé, l'utilisateur est directement redirigé sur celui-ci.
+
 \subsection{CRUD pour tous les modèles}
 
+Tous les modèles sont éditables et supprimables par l'utilisateur auxquels ils appartiennent ou par les administrateurs :
+
+\begin{itemize}
+    \item Un tag peut être édité, ajouté ou supprimé par un administrateur
+    \item Un utilisateur peut changer ses informations et son mot de passe
+    \item Un administrateur peut éditer tous les utilisateurs
+    \item Un administrateur peut promouvoir ou dégrader d'autres administrateurs.
+    \item Les établissements peuvent être crées, modifiés ou supprimés par des administrateurs
+    \item Des commentaires peuvent être ajoutés
+    \item Les commentaires peuvent être supprimés et édités par leur propriétaire ainsi que les administrateurs
+\end{itemize}
 
 \subsection{Sécurité}
 
+Les mots de passe des utilisateurs sont hashés et salés avec la fonction cryptographique \textit{pbkdf2}. Celle-ci est réputée pour sa robustesse et sa complexité élevée d'attaque.
+
+De plus, toutes les actions sont contrôlées du côté serveur, que ce soit pour vérifier leur validité (par exemple que l'adresse mail est valide) ou pour vérifier que l'utilisateur courant a bien le droit d'effectuer cette action.
+
 \subsection{Validation côté client}
+
+Les formulaires sont aussi validés du côté client ce qui permet à l'utilisateur d'avoir un retour dynamique en direct sur ses entrés plutôt que de soumettre un formulaire et de recevoir une erreur en retour si celui-ci est invalide.
 
 
 \end{document}
