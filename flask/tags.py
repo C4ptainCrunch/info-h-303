@@ -25,11 +25,28 @@ def list_tags():
         GROUP BY etablissement.id, label.id
         ORDER BY label.name, tag_count DESC
     """.format(models.Label.star(), models.Etablissement.star())
+
+    queryR5 = """
+    SELECT {} FROM label 
+        FULL JOIN (
+            SELECT etablissement_label.label_id AS id, AVG(comment.score) AS score FROM etablissement_label 
+            LEFT JOIN etablissement ON etablissement_label.etablissement_id = etablissement.id 
+            FULL JOIN comment ON etablissement.id = comment.etablissement_id 
+            GROUP BY etablissement_label.label_id, etablissement.id
+        ) l ON label.id = l.id 
+        GROUP BY label.id 
+        HAVING COUNT(*) >= 5 
+        ORDER BY AVG(l.score);
+    """.format(models.Label.star())
+
     g.cursor.execute(query)
     rows = g.cursor.fetchall()
     tags = itertools.groupby(rows, key=lambda x: (x['label.name'], x['label.id']))
     tags = [(group, [(models.Etablissement.from_dict(e), e['tag_count']) for e in data]) for group, data in tags]
-    return render_template("list_tags.html", tags=tags, form=forms.Label())
+
+    g.cursor.execute(queryR5)
+    rowsR5 = g.cursor.fetchall()
+    return render_template("list_tags.html", tags=tags, form=forms.Label(), tagsR5=rowsR5)
 
 @tags_api.route("/add/<int:epk>", methods=['GET', 'POST'])
 @auth_required

@@ -3,14 +3,15 @@
 {% block content %}
 
 {% if user.is_admin %}
+    <h3>Ajoutez votre label</h3>
     {% import "bootstrap/wtf.html" as wtf %}
-    {{wtf.quick_form(form, action="/tags/create")}}
+    {{wtf.quick_form(form, action="/tags/create", form_type="inline")}}
 {% endif %}
 
-Tags populaires : R5 (avec ancres)
+Tags populaires : {% for tag in tagsR5 %}<a href="#{{tag['label.id']}}">{{tag["label.name"]}}</a>, {% endfor %}
 
 {% for ((tag, tag_id), etablissements) in tags %}
-    <h1>
+    <h1 id="{{tag_id}}">
         {{tag}}
         {% if user.is_admin %}
             <a href="/tags/{{tag_id}}/edit">Editer</a>
