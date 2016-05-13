@@ -63,14 +63,13 @@
             </div>
             <div class="panel-body">
                 <h4>Tags</h4>
-                <p>{% for tag in tags %}
-                    <span class="label label-success">
-                        <i class="fa fa-tag" aria-hidden="true"></i>
+                <p style="line-height: 1.6em;">{% for tag in tags %}
+                    <span class="label label-success"><i class="fa fa-tag" aria-hidden="true"></i>
                         {{tag['label.name']}}
                         {% if tag['was_tagged_by_user'] %}
                             &nbsp;<a href="/tags/remove/{{e.id}}/{{tag['label.id']}}"><i class="fa fa-times" aria-hidden="true"></i></a>
                         {% endif %}
-                    </span>&nbsp;
+                    </span> &nbsp;
                 {% endfor %}</p>
                 <p><span class="label label-info">
                     <a href="/tags/add/{{e.id}}">
