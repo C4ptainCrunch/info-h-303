@@ -10,29 +10,68 @@
 
 {% block content %}
 
-<h1>{{e.name}} <small>par {{e.user.username}}</small></h1>
-{% if user.is_admin %}
-        <a href="/delete/{{e.id}}" class="btn btn-danger">Supprimer</a>
-        <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning">Editer</a>
-{% endif %}
+<div class="row">
+  <div class="col-md-8">
+        <h1>
+            {% if e.type == "hotel" %}
+                <i class="fa fa-bed" aria-hidden="true"></i>
+            {% elif e.type == "restaurant" %}
+                <i class="fa fa-cutlery" aria-hidden="true"></i>
+            {% elif e.type == "bar" %}
+                <i class="fa fa-beer" aria-hidden="true"></i>
+            {% endif %}
+            {{e.name}}
+        </h1>
+        {% block speciation %}{% endblock %}
 
-    <h3>Tags</h3>
-{% for tag in tags %}
-    <span class="label label-success">
-        {{tag['label.name']}}
-        {% if tag['was_tagged_by_user'] %}
-            &nbsp;<a href="/tags/remove/{{e.id}}/{{tag['label.id']}}"><i class="fa fa-times" aria-hidden="true"></i></a>
-        {% endif %}
-    </span>&nbsp;
-{% endfor %}
-<span class="label label-info"><a href="/tags/add/{{e.id}}">Ajouter <i class="fa fa-plus" aria-hidden="true"></i></a></span>
+        <h2>Commentaires</h2>
+        {% for comment in comments %}
+            <h4>{{comment.user.username}} a attribué la note de {{comment.score}} {{comment.date|humanize_date}}</h4>
+            <p>{{comment.text}}</p>
+        {% endfor %}
+  </div>
+  <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Informations</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Tags</h4>
+                <p>{% for tag in tags %}
+                    <span class="label label-success">
+                        <i class="fa fa-tag" aria-hidden="true"></i>
+                        {{tag['label.name']}}
+                        {% if tag['was_tagged_by_user'] %}
+                            &nbsp;<a href="/tags/remove/{{e.id}}/{{tag['label.id']}}"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        {% endif %}
+                    </span>&nbsp;
+                {% endfor %}</p>
+                <p><span class="label label-info">
+                    <a href="/tags/add/{{e.id}}">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Ajouter un nouveau tag
+                    </a>
+                </span></p>
 
-{% block speciation %}{% endblock %}
+                <h4>Créateur : {{e.user.username}}</h4>
 
-{% for comment in comments %}
-    <h4>{{comment.user.username}} a attribué la note de {{comment.score}} {{comment.date|humanize_date}}</h4>
-    <p>{{comment.text}}</p>
+                {% if user.is_admin %}
+                    <h4>Administration</h4>
+                    <a href="/delete/{{e.id}}" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        Supprimer
+                    </a>
+                    <a href="/{{e.type}}s/{{e.id}}/edit" class="btn btn-warning btn-sm">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        Editer
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+  </div>
+</div>
 
-{% endfor %}
+
+
 
 {% endblock %}
