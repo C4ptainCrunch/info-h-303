@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>
-    Profil de {{profile.username}}
+    Profil de {{profile.username}} <small>inscrit {{profile.created.date()|humanize_date}}</small>
 </h1>
 <img src="{{profile.gravatar()}}">
 {% if profile.is_admin %}
