@@ -5,6 +5,7 @@
 <h1>
     Profil de {{profile.username}}
 </h1>
+<img src="{{profile.gravatar()}}">
 {% if profile.is_admin %}
     <span class="label label-success">Administrateur</span>
 {% endif %}

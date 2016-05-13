@@ -4,6 +4,7 @@
 
 {% for u in users %}
     <h1>
+        <img src="{{u.gravatar()}}">
         <a href="/users/{{u.id}}">{{u.username}}</a>
         <small>
             {% if u.is_admin %}

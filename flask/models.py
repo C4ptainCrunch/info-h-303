@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import g, abort
 from werkzeug import secure_filename
 import os
+import urllib, hashlib
 
 class Model:
 
@@ -92,6 +93,11 @@ class User(Model):
 
     def is_authenticated(self):
         return True
+
+    def gravatar(self):
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode('utf-8')).hexdigest() + "?"
+        gravatar_url += urllib.parse.urlencode({'d':'wavatar', 's':str(100)})
+        return gravatar_url
 
     class Meta:
         fields = ['id', "username", "email", "password", "created", "is_admin"]
