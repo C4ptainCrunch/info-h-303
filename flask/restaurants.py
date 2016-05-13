@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 import forms
 import config
 import models
-from datetime import datetime
+from datetime import datetime, date
 import statistics
 import etablissement
 
@@ -87,7 +87,8 @@ def show_restaurant(etablissement_id):
         e=restaurant.etablissement,
         tags=tags,
         comments=comments,
-        commentForm=forms.Comment()
+        commentForm=forms.Comment(),
+        should_comment=(len(list(filter(lambda x:x.user_id == g.user.id and x.date == date.today(), comments))) == 0)
     )
 
 @restaurants_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
