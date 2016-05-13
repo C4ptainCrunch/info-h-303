@@ -2,16 +2,14 @@
 {% block title %}Utilisateurs{% endblock %}
 {% block content %}
 
-{% for u in users %}
-    <h1>
-        <img src="{{u.gravatar()}}">
-        <a href="/users/{{u.id}}">{{u.username}}</a>
-        <small>
-            {% if u.is_admin %}
-                <span class="label label-success">Administrateur</span>
-            {% endif %}
-        </small>
-    </h1>
-{% endfor %}
-
+<div class="row">
+    {% for u in users %}
+        <div class="col-md-4">
+            <h1>
+                <img src="{{u.gravatar()}}" style="border-radius: 2em;">
+                <a href="/users/{{u.id}}">{{u.username}}</a>
+            </h1>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}
