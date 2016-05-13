@@ -2,11 +2,18 @@
 {% block title %}Je veux contribuer{% endblock %}
 
 {% block content %}
+<h1>Vous voulez contribuer ?</h1>
+<p>Ces administrateurs n'ont même pas commenté tous les établissements qu'ils ont créé. Allez les seccuer un peu !</p>
+<ul>
 {% for admin in admins %}
-{{admin.username}}
+<li><a href="/users/{{admin.id}}">{{admin.username}}</a></li>
 {% endfor %}
+</ul>
 </br>
+<p>Ces établissement on moins de deux commentaires, si vous alliez les commenter ça pourrait pêut-être les aider à devenir plus populaires non ?</p>
+<ul>
 {% for e in etablissements %}
-{{e.name}}
+<li><a href="/etablissements/{{e.id}}">{{e.name}}</a></li>
 {% endfor %}
+</ul>
 {% endblock %}
