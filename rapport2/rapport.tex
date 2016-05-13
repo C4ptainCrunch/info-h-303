@@ -13,6 +13,8 @@
 \usepackage{fullpage}
 \usepackage{blindtext}
 \usepackage[section]{placeins}
+\usepackage{color}
+\usepackage{listings}
 
 
 \def\ojoin{\setbox0=\hbox{$\bowtie$}%
@@ -21,6 +23,25 @@
 \def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
 \def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
 \def\join{\bowtie}
+
+\lstset{
+  language=SQL,
+  basicstyle=\ttfamily\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  commentstyle=\color{cyan},    % comment style
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{blue}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=5,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{red},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+}
 
 
 \begin{document}
@@ -174,6 +195,7 @@ Nous avons considéré que deux utilisateurs ne peuvent avoir la même adresse e
 
 
 \section{Sript DDL de création de la base de données}
+\lstinputlisting{../flask/createdb.sql}
 
 \section{Requêtes}
 \input{requetes}
