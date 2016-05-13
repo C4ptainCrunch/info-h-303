@@ -3,49 +3,71 @@
 {% block content %}
 
 <h1>
-    Profil de {{profile.username}} <small>inscrit {{profile.created.date()|humanize_date}}</small>
+    {{profile.username}}
+    <small>inscrit {{profile.created.date()|humanize_date}}</small>
+    {% if profile.is_admin %}
+        <span class="label label-success">Administrateur</span><br>
+    {% endif %}
 </h1>
-<img src="{{profile.gravatar()}}">
-{% if profile.is_admin %}
-    <span class="label label-success">Administrateur</span>
-{% endif %}
+<img src="{{profile.gravatar()}}" style="border-radius: 1em;"><br>
+<br>
 {% if user.is_admin %}
     {% if profile.id != user.id %}
         {% if profile.is_admin %}
-            <a href="/users/{{profile.id}}/unset_admin">Dégrader</a>
+            <a href="/users/{{profile.id}}/unset_admin" class="btn btn-danger">
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                Dégrader
+            </a>
         {% else %}
-            <a href="/users/{{profile.id}}/set_admin">Promouvoir</a>
+            <a href="/users/{{profile.id}}/set_admin" class="btn btn-info">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                Promouvoir
+            </a>
         {% endif%}
     {% endif %}
 {% endif%}
 
 {% if profile.id == user.id %}
-    <a href="/users/{{profile.id}}/edit">Editer mon profil</a>
-    <a href="/users/password">Changer mon mot de passe</a>
+    <a href="/users/{{profile.id}}/edit" class="btn btn-success">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        Editer mon profil
+    </a>
+    <a href="/users/password" class="btn btn-info">
+        <i class="fa fa-key" aria-hidden="true"></i>
+        Changer mon mot de passe
+    </a>
 {% elif user.is_admin %}
-    <a href="/users/{{profile.id}}/edit">Editer</a>
+    <a href="/users/{{profile.id}}/edit" class="btn btn-success">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        Editer
+    </a>
 {% endif %}
 
 {% if related %}
-    <h1>Utilisateurs semblables</h1>
-    {% for u in related %}
-        <h1>
-            <a href="/users/{{u.id}}">{{u.username}}</a>
-            <small>
-                {% if u.is_admin %}
-                    <span class="label label-success">Administrateur</span>
-                {% endif %}
-            </small>
-        </h1>
-    {% endfor %}
+    <h2>Utilisateurs semblables à {{profile.username}}</h2>
+        <h3>
+            {% for u in related %}
+                    <a href="/users/{{u.id}}">{{u.username}}</a>
+            {% endfor %}
+        </h3>
 {% endif%}
 
 {% if tags %}
-    <h1>Tags de cet utilisateur</h1>
-    {% for tag in tags %}
-        <span class="label label-success">{{tag['label.name']}}</span>
-        sur <a href="/etablissements/{{tag['etablissement.id']}}">{{tag['etablissement.name']}}</a><br>
-    {% endfor %}
+    <h2>{{profile.username}} a taggé ces établissements</h2>
+    <div class="row">
+        {% for tag in tags %}
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>
+                            <a href="/etablissements/{{tag['etablissement.id']}}">{{tag['etablissement.name']}}</a>
+                        </h4>
+                        <span class="label label-success">{{tag['label.name']}}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endif %}
 
 {% endblock %}
