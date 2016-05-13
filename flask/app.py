@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash, jsonify, json, Response
+from flask import Flask, render_template, request, g, redirect, url_for, session, abort, flash, jsonify, json, Response, Markup
 from functools import wraps
 import psycopg2
 import psycopg2.extras
@@ -8,6 +8,9 @@ import config
 import models
 from datetime import datetime
 import statistics
+import humanize
+from datetime import date, timedelta
+import markdown
 
 from ressources import *
 
@@ -135,6 +138,19 @@ def get_etablissement(pk):
 
     return redirect("/{}s/{}".format(e.type, e.id))
 
+
+@app.template_filter('humanize_date')
+def humanize_date(d):
+    humanize.i18n.activate('fr')
+    diff = date.today() - d
+    if(diff < timedelta(hours=24)):
+        return "aujourd'hui"
+
+    return humanize.naturaltime(diff)
+
+@app.template_filter('markdown')
+def markdown_f(string):
+    return Markup(markdown.markdown(string))
 
 if __name__ == "__main__":
     app.run(debug=config.DEBUG)
