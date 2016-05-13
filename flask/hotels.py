@@ -67,8 +67,9 @@ def show_hotel(etablissement_id):
 
     hotel = models.Hotel.from_dict(data)
     tags = etablissement.get_labels(etablissement_id, g.user.id)
+    comments = etablissement.get_comments(etablissement_id)
 
-    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement, tags=tags)
+    return render_template('view_hotel.html', hotel=hotel, e=hotel.etablissement, tags=tags, comments=comments)
 
 @hotels_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
 @admin_required
