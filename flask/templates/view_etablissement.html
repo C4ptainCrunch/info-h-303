@@ -26,12 +26,25 @@
 
         <h2>Commentaires</h2>
         {% for comment in comments %}
-            <h4>{{comment.user.username}} a attribué la note de {{comment.score}} {{comment.date|humanize_date}}</h4>
-            <p>{{comment.text}}</p>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{comment.user.username}}, {{comment.date|humanize_date}}
+                    &nbsp;&nbsp;
+                    {% for _ in range(comment.score) %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endfor %}
+                    {% for _ in range(5 - comment.score) %}
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endfor %}
+                </div>
+                <div class="panel-body">
+                    <p>{{comment.text}}</p>
+                </div>
+            </div>
         {% endfor %}
   </div>
   <div class="col-md-4">
-        <div class="panel panel-default">
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">Informations</h3>
             </div>
