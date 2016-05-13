@@ -9,6 +9,7 @@ import models
 from datetime import datetime
 import statistics
 import itertools
+import models
 
 from ressources import *
 
@@ -23,3 +24,14 @@ def get_labels(etablissement_id, user_id):
 
     g.cursor.execute(query, [user_id, etablissement_id])
     return g.cursor.fetchall()
+
+def get_comments(etablissement_id):
+    query = """
+    SELECT {}, {} FROM comment
+    JOIN users
+        ON comment.user_id=users.id
+    WHERE comment.etablissement_id=%s
+    """.format(models.Comment.star(), models.User.star())
+
+    return models.list_of(query, [etablissement_id], models.Comment)
+

@@ -29,4 +29,10 @@
 
 {% block speciation %}{% endblock %}
 
+{% for comment in comments %}
+    <h4>{{comment.user.username}} a attribué la note de {{comment.score}}</h4>
+    <p>{{comment.text}}</p>
+
+{% endfor %}
+
 {% endblock %}

@@ -247,6 +247,22 @@ class Restaurant(Model):
         foreign_models = [Etablissement]
 
 
+class Comment(Model):
+    def __init__(self, id=None, user_id=None, etablissement_id=None, date=None, score=None, text=None):
+        self.id = int(id) if id is not None else None
+        self.user_id = user_id
+        self.etablissement_id = etablissement_id
+        self.date = date
+        self.score = score
+        self.text = text
+
+    class Meta:
+        fields = ["id", "user_id", "etablissement_id", "date", "score", "text"]
+        auto_fields = ['id']
+        pk = "id"
+        table = "comment"
+        foreign_models = [Etablissement, User]
+
 
 def get_or_404(query, params, model):
     g.cursor.execute(query, params)
