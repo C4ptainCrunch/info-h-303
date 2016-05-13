@@ -96,7 +96,7 @@ def profile(pk):
         JOIN users AS u ON c.user_id = u.id
         WHERE users.username = %s AND comment.score >= 4 AND u.username !=%s
         GROUP BY u.id HAVING BOOL_AND(c.score >= 4)
-    ) GROUP BY etablissement.id;
+    ) GROUP BY etablissement.id
     """.format(models.Etablissement.star())
     recommandations = models.list_of(recommandation_query, [user.username, user.username], models.Etablissement)
 

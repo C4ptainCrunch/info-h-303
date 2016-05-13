@@ -36,7 +36,7 @@ def list_tags():
         ) l ON label.id = l.id 
         GROUP BY label.id 
         HAVING COUNT(*) >= 5 
-        ORDER BY AVG(l.score);
+        ORDER BY AVG(l.score)
     """.format(models.Label.star())
 
     g.cursor.execute(query)
