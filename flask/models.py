@@ -179,6 +179,16 @@ class Etablissement(Model):
         if self.type == 'restaurant':
             return "/static/default-restaurant.jpg"
 
+    def get_url(self):
+        if self.type == 'hotel':
+            return "/hotels/" + str(self.id)
+
+        if self.type == 'bar':
+            return "/bars/" + str(self.id)
+
+        if self.type == 'restaurant':
+            return "/restaurants/" + str(self.id)
+
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]
         auto_fields = ['id']
