@@ -62,15 +62,31 @@
                 <h3 class="panel-title">Informations</h3>
             </div>
             <div class="panel-body">
+                <h4>Téléphone</h4>
+                <p>
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    {{e.phone}}
+                </p>
+                {% if e.url %}
+                <h4>Site web</h4>
+                <p>
+                    <i class="fa fa-laptop" aria-hidden="true"></i>
+                    <a href="{{e.url}}">{{e.url}}</a>
+                </p>
+                {% endif %}
+                <h4>Adresse</h4>
+                <address>
+                  <strong>{{e.address_number}}, {{e.address_street}}</strong><br>
+                  {{e.address_zip}} {{e.address_city}}<br>
+                </address>
                 <h4>Tags</h4>
-                <p>{% for tag in tags %}
-                    <span class="label label-success">
-                        <i class="fa fa-tag" aria-hidden="true"></i>
+                <p style="line-height: 1.6em;">{% for tag in tags %}
+                    <span class="label label-success"><i class="fa fa-tag" aria-hidden="true"></i>
                         {{tag['label.name']}}
                         {% if tag['was_tagged_by_user'] %}
                             &nbsp;<a href="/tags/remove/{{e.id}}/{{tag['label.id']}}"><i class="fa fa-times" aria-hidden="true"></i></a>
                         {% endif %}
-                    </span>&nbsp;
+                    </span> &nbsp;
                 {% endfor %}</p>
                 <p><span class="label label-info">
                     <a href="/tags/add/{{e.id}}">
@@ -79,7 +95,11 @@
                     </a>
                 </span></p>
 
-                <h4>Créateur : {{e.user.username}}</h4>
+                <h4>Carte</h4>
+                <div id="emap"></div>
+
+
+                <h4>Créé par {{e.user.username}} {{e.created|humanize_date}}</h4>
 
                 {% if user.is_admin %}
                     <h4>Administration</h4>
@@ -96,4 +116,23 @@
         </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+var lat = {{e.latitude}};
+var lon = {{e.longitude}};
+
+var map = L.map('emap', { zoomControl: true }).setView([lat, lon], 13);
+
+var url = "https://api.mapbox.com/styles/v1/mapbox/streets-v8/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q";
+
+L.tileLayer(url, {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+L.marker([lat, lon]).addTo(map);
+
+</script>
 {% endblock %}
