@@ -17,4 +17,19 @@
         {% endif%}
     {% endif %}
 {% endif%}
+
+{% if related %}
+    <h1>Utilisateurs semblables</h1>
+    {% for u in related %}
+        <h1>
+            <a href="/users/{{u.id}}">{{u.username}}</a>
+            <small>
+                {% if u.is_admin %}
+                    <span class="label label-success">Administrateur</span>
+                {% endif %}
+            </small>
+        </h1>
+    {% endfor %}
+{% endif%}
+
 {% endblock %}

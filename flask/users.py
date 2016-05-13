@@ -61,7 +61,22 @@ def register():
 def profile(pk):
     query = "SELECT * FROM users WHERE id=%s"
     user = models.get_or_404(query, [pk], models.User)
-    return render_template('profile.html', profile=user)
+
+    related_query = """
+    SELECT {} FROM users WHERE users.id !=%s AND users.id IN (
+        SELECT user_id FROM comment WHERE etablissement_id
+            IN (
+                SELECT etablissement_id FROM comment WHERE
+                    user_id=(SELECT id FROM users WHERE id=%s)
+                    AND score > 3
+            )
+            AND score > 3
+            GROUP BY user_id
+            HAVING COUNT(*) >= 3
+    )"""
+    related = models.list_of(related_query.format(models.User.star()), [pk, pk], models.User)
+
+    return render_template('profile.html', profile=user, related=related)
 
 @users_api.route("/<int:pk>/set_admin")
 @admin_required
@@ -89,3 +104,10 @@ def logout():
     if "user_id" in session:
         del session['user_id']
     return redirect(url_for('index'))
+
+@users_api.route("/")
+def list_users():
+    query = "SELECT {} FROM users ORDER BY users.id DESC".format(models.User.star())
+    users = models.list_of(query, [], models.User)
+
+    return render_template('list_users.html', users=users)

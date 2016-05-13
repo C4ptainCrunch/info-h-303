@@ -225,4 +225,8 @@ def get_or_404(query, params, model):
 def list_of(query, params, model):
     g.cursor.execute(query, params)
     rows = g.cursor.fetchall()
-    return [model.from_dict(r) for r in rows]
+    def map_to_model(r):
+        m = model.from_dict(r)
+        m.extra = r
+        return m
+    return [map_to_model(r) for r in rows]

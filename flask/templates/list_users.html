@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}All users{% endblock %}
+{% block content %}
+
+{% for u in users %}
+    <h1>
+        <a href="/users/{{u.id}}">{{u.username}}</a>
+        <small>
+            {% if u.is_admin %}
+                <span class="label label-success">Administrateur</span>
+            {% endif %}
+        </small>
+    </h1>
+{% endfor %}
+
+{% endblock %}
