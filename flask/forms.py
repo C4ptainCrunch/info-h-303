@@ -92,6 +92,6 @@ class EditUser(Form):
     submit = SubmitField("Envoyer")
 
 class Comment(Form):
-    score = IntegerField("Score", validators=[validators.NumberRange(min=0, max=5)])
+    score = IntegerField("Note (sur 5)", validators=[validators.NumberRange(min=0, max=5)])
     text = TextAreaField("Commentaire")
     submit = SubmitField("Envoyer")
