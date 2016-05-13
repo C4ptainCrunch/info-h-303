@@ -170,13 +170,22 @@ Nous avons ajouté un champ \textit{Type} à la table \textit{Etablissement} pou
 
 De plus il faudra rajouter une contrainte pour que \textit{Bar.EtablissementId}, \textit{Restaurant.EtablissementId} et \textit{Hotel.EtablissementId} soient uniques, ce qui permet de garder la relation ``one-to-one'' entre \textit{Etablissement} et \textit{Bar}, \textit{Restaurant}, \textit{Hotel}.
 
-Nous avons considéré que deux utilistateurs ne peuvent avoir la même adresse email; l'adresse email d'un \textit{Utilisateur} doit donc être unique.
+Nous avons considéré que deux utilisateurs ne peuvent avoir la même adresse email; l'adresse email d'un \textit{Utilisateur} doit donc être unique.
 
 
 \section{Sript DDL de création de la base de données}
 
 \section{Requêtes}
 \input{requetes}
+
+\section{Implémentation et choix}
+\subsection{Language et bibliothèques}
+
+Nous avons choisi d'utiliser \textbf{Python 3} ainsi que le framework \textbf{Flask} pour implémenter notre application web. Nous avons choisi \textbf{Python 3} car il est notre langage de prédilection et qu'il dispose d'un écosystème de librairies très développé.
+
+Nous nous étions d'abord tourné vers \textbf{Django} pour le framework web car nous avons tous les deux de l'expérience avec celui-ci et qu'il est très puissant pour prototyper rapidement (gestion automatique du CRUD\footnote{CReate, Update, Delete}, validation des formulaires, gestion des utilisateurs incluse, ...) mais après avoir rapidement essayé de l'utiliser dans utiliser son \textit{ORM} (qui fait aussi \textit{query-builder}) pour suivre les consignes, nous nous somme rendus compte que nous perdions touts les avantages de \textbf{Django} tout en gardant ses inconvénients.
+
+Nous nous sommes donc tournés vers le framework \textbf{Flask}, qui est beaucoup plus minimal et qui nous a donc laissé plus libres dans nos choix d'implémentation, celui-ci ne proposant ni d'ORM, ni de gestion des utilisateurs ni de validation de formulaires.
 
 \end{document}
 
