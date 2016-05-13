@@ -95,3 +95,7 @@ class Comment(Form):
     score = IntegerField("Note (sur 5)", validators=[validators.NumberRange(min=0, max=5)])
     text = TextAreaField("Commentaire")
     submit = SubmitField("Envoyer")
+
+class Label(Form):
+    name = TextField("Label", [validators.Length(min=2, max=254)])
+    submit = SubmitField("Envoyer")

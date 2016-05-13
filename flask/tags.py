@@ -9,6 +9,7 @@ import models
 from datetime import datetime
 import statistics
 import itertools
+from models import Label
 
 from ressources import *
 
@@ -68,3 +69,36 @@ def remove_tag(epk, tid):
     """
     g.cursor.execute(query, [epk, g.user.id, tid])
     return redirect("/etablissements/"+ str(epk))
+
+@tags_api.route("/create", methods=["POST"])
+@auth_required
+def create():
+    form = forms.Label(request.form)
+    if request.method == 'POST' and form.validate():
+        label = models.Label()
+        form.populate_obj(label)
+        label.insert(g.cursor)
+
+    return redirect(url_for('.list_tags'))
+
+@tags_api.route("/edit/<int:tid>", methods=["POST", "GET"])
+@admin_required
+def edit_tag(tid):
+    query = """
+    SELECT {} FROM label
+    WHERE label.id=%s
+    """.format(models.Label.star())
+
+    g.cursor.execute(query, [tid])
+    data = g.cursor.fetchone()
+    if not data:
+        return  abort(404)
+    label = models.Label.from_dict(data)
+
+    form = forms.Label(request.form, obj=label)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(label)
+        label.update(g.cursor)
+        return redirect(url_for('.list_tags'))
+
+    return render_template('edit_label.html', form=form)
