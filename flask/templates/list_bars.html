@@ -6,23 +6,31 @@
         <a href="/bars/add" class="btn btn-success">Ajouter un bar</a>
 {% endif %}
 
-{% for elem in etablissements %}
-    {% set bar = elem[0] %}
-    {% set e = bar.etablissement %}
-    {% set score = elem[1] %}
-    <h1>
-        <a href="/bars/{{e.id}}">{{e.name}}</a>
-        <small>
-            {% if not bar.smoker %}<i class="fa fa-2x">&#128685;</i>{% endif %}
-            <span class="stars">
-                {% if score %}
-                {%for i in range(score|round|int) %}
-                    <i class="fa fa-star"></i>
-                {% endfor %}
-                {% endif %}
-            </span>
-        </small>
-    </h1>
-{% endfor %}
+<div class="row">
+    {% for elem in etablissements %}
+        <div class="col-md-4 col-sm-6">
+            <div class="thumbnail">
+                {% set bar = elem[0] %}
+                {% set e = bar.etablissement %}
+                {% set score = elem[1] %}
+                <a href="/hotels/{{e.id}}">
+                    <img src="{{e.get_picture()}}" style="height: 15em; width:100%; object-fit: cover;">
+                </a>
+                <div class="caption">
+                  <h3 class="row-fluid text-center">
+                      {{e.name}} <a href="/bars/{{e.id}}" class="btn btn-primary" role="button">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                          Plus d'infos
+                      </a>
+                  </h3>
+                  <p class="row-fluid text-center">
+
+                  </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 
 {% endblock %}

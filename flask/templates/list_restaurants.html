@@ -6,39 +6,48 @@
         <a href="/restaurants/add" class="btn btn-success">Ajouter un restaurant</a>
 {% endif %}
 
-{% for elem in etablissements %}
-    {% set restaurant = elem[0] %}
-    {% set e = restaurant.etablissement %}
-    {% set score = elem[1] %}
-    <h1>
-        <a href="/restaurants/{{e.id}}">{{e.name}}</a>
-        <small>
-            <span class="stars">
-                {% if score %}
-                    {%for i in range(score|round|int) %}
-                        <i class="fa fa-star"></i>
-                    {% endfor %}
-                {% endif %}
-            </span>
-            {% if is_supper %}
-                {% if restaurant.openings[day * 2 + 1] %}
-                    Ouvert ce soir
-                {% else %}
-                    Fermé pour l'instant
-                {% endif %}
-            {% else %}
-                {% if restaurant.openings[day * 2] and restaurant.openings[day * 2 + 1] %}
-                    Ouvert toute la journée
-                {% elif restaurant.openings[day * 2] %}
-                    Ouvert ce midi
-                {% elif restaurant.openings[day * 2 + 1] %}
-                    Ouvert ce soir
-                {% else %}
-                    Fermé aujourd'hui
-                {% endif %}
-            {% endif %}
-        </small>
-    </h1>
-{% endfor %}
+
+<div class="row">
+    {% for elem in etablissements %}
+        <div class="col-md-4 col-sm-6">
+            <div class="thumbnail">
+                {% set restaurant = elem[0] %}
+                {% set e = restaurant.etablissement %}
+                {% set score = elem[1] %}
+                <a href="/restaurants/{{e.id}}">
+                    <img src="{{e.get_picture()}}" style="height: 15em; width:100%; object-fit: cover;">
+                </a>
+                <div class="caption">
+                  <h3 class="row-fluid text-center">
+                      {{e.name}} <a href="/hotels/{{e.id}}" class="btn btn-primary" role="button">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                          Plus d'infos
+                      </a>
+                  </h3>
+                  <p class="row-fluid text-center">
+                       {% if is_supper %}
+                            {% if restaurant.openings[day * 2 + 1] %}
+                                Ouvert ce soir
+                            {% else %}
+                                Fermé pour l'instant
+                            {% endif %}
+                        {% else %}
+                            {% if restaurant.openings[day * 2] and restaurant.openings[day * 2 + 1] %}
+                                Ouvert toute la journée
+                            {% elif restaurant.openings[day * 2] %}
+                                Ouvert ce midi
+                            {% elif restaurant.openings[day * 2 + 1] %}
+                                Ouvert ce soir
+                            {% else %}
+                                Fermé aujourd'hui
+                            {% endif %}
+                        {% endif %}
+                  </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
 
