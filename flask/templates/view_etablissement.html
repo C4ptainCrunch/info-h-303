@@ -30,7 +30,7 @@
 {% block speciation %}{% endblock %}
 
 {% for comment in comments %}
-    <h4>{{comment.user.username}} a attribué la note de {{comment.score}}</h4>
+    <h4>{{comment.user.username}} a attribué la note de {{comment.score}} {{comment.date|humanize_date}}</h4>
     <p>{{comment.text}}</p>
 
 {% endfor %}

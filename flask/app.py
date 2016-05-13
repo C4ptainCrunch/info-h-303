@@ -8,6 +8,8 @@ import config
 import models
 from datetime import datetime
 import statistics
+import humanize
+from datetime import date
 
 from ressources import *
 
@@ -132,6 +134,12 @@ def get_etablissement(pk):
     e = models.get_or_404(query, [pk], models.Etablissement)
 
     return redirect("/{}s/{}".format(e.type, e.id))
+
+
+@app.template_filter('humanize_date')
+def humanize_date(d):
+    humanize.i18n.activate('fr')
+    return humanize.naturaltime(date.today() - d)
 
 
 if __name__ == "__main__":
