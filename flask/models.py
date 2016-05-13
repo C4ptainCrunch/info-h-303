@@ -166,6 +166,19 @@ class Etablissement(Model):
             open('static/media/' + secure, 'wb').write(image_data)
             self.picture = '/static/media/' + secure
 
+    def get_picture(self):
+        if self.picture:
+            return self.picture
+
+        if self.type == 'hotel':
+            return "/static/default-hotel.jpg"
+
+        if self.type == 'bar':
+            return "/static/default-bar.jpg"
+
+        if self.type == 'restaurant':
+            return "/static/default-restaurant.jpg"
+
     class Meta:
         fields = ['id', "name", "phone", "url", "address_street", "address_number", "address_zip", "address_city", "latitude", "longitude", "created", "user_id", "type", "picture"]
         auto_fields = ['id']
