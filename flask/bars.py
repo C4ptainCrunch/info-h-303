@@ -69,7 +69,7 @@ def show_bar(etablissement_id):
     tags = etablissement.get_labels(etablissement_id, g.user.id)
     comments = etablissement.get_comments(etablissement_id)
 
-    return render_template('view_bar.html', bar=bar, e=bar.etablissement, tags=tags, comments=comments)
+    return render_template('view_bar.html', bar=bar, e=bar.etablissement, tags=tags, comments=comments, commentForm=forms.Comment())
 
 @bars_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
 @admin_required

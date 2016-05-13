@@ -86,7 +86,8 @@ def show_restaurant(etablissement_id):
         restaurant=restaurant,
         e=restaurant.etablissement,
         tags=tags,
-        comments=comments
+        comments=comments,
+        commentForm=forms.Comment()
     )
 
 @restaurants_api.route("/<int:etablissement_id>/edit", methods=['GET', 'POST'])
