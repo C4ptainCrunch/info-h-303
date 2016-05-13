@@ -84,8 +84,24 @@ def profile(pk):
     """.format(models.Label.star(), models.Etablissement.star())
     g.cursor.execute(tags_query, [pk])
     tags = g.cursor.fetchall()
+
+    recommandation_query = """
+    SELECT {} FROM comment
+    JOIN etablissement ON comment.etablissement_id=etablissement.id AND comment.score > 3
+    WHERE comment.user_id IN (
+        SELECT u.id FROM etablissement
+        JOIN comment ON etablissement.id = comment.etablissement_id
+        JOIN users ON comment.user_id = users.id
+        JOIN comment AS c ON etablissement.id = c.etablissement_id
+        JOIN users AS u ON c.user_id = u.id
+        WHERE users.username = %s AND comment.score >= 4 AND u.username !=%s
+        GROUP BY u.id HAVING BOOL_AND(c.score >= 4)
+    ) GROUP BY etablissement.id;
+    """.format(models.Etablissement.star())
+    recommandations = models.list_of(recommandation_query, [user.username, user.username], models.Etablissement)
+
     # raise
-    return render_template('view_user.html', profile=user, related=related, tags=tags)
+    return render_template('view_user.html', profile=user, related=related, tags=tags, recommandations=recommandations)
 
 @users_api.route("/<int:pk>/set_admin")
 @admin_required
