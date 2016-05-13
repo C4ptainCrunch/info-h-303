@@ -43,6 +43,8 @@
                     <p>{{comment.text|markdown}}</p>
                 </div>
             </div>
+        {% else %}
+            <p class="text-muted">Il n'y a pas de commentaires pour l'instant...</p>
         {% endfor %}
   </div>
   <div class="col-md-4">
