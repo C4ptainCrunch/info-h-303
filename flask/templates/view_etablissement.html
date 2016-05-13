@@ -25,8 +25,6 @@
         {% block speciation %}{% endblock %}
 
         <h2>Commentaires</h2>
-        {% import "bootstrap/wtf.html" as wtf %}
-{{wtf.quick_form(commentForm, action="/comment/add/"+e.id|string+"/"+user.id|string)}}
         {% for comment in comments %}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -43,7 +41,20 @@
                     <p>{{comment.text|markdown}}</p>
                 </div>
             </div>
+        {% else %}
+            <p class="text-muted">Il n'y a pas de commentaires pour l'instant...</p>
         {% endfor %}
+        {% if should_comment %}
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Ajoutez votre commentaire</h3>
+                </div>
+                <div class="panel-body">
+                    {% import "bootstrap/wtf.html" as wtf %}
+                    {{wtf.quick_form(commentForm, action="/comment/add/"+e.id|string+"/"+user.id|string)}}
+                </div>
+            </div>
+        {% endif %}
   </div>
   <div class="col-md-4">
         <div class="panel panel-info">
