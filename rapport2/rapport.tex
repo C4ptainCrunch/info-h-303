@@ -187,5 +187,63 @@ Nous nous étions d'abord tourné vers \textbf{Django} pour le framework web car
 
 Nous nous sommes donc tournés vers le framework \textbf{Flask}, qui est beaucoup plus minimal et qui nous a donc laissé plus libres dans nos choix d'implémentation, celui-ci ne proposant ni d'ORM, ni de gestion des utilisateurs ni de validation de formulaires.
 
+Pour l'interface utilisateur, côté serveur, nous avons utilisé le moteur de template \textbf{Jinja2} qui vient directement avec \textbf{Flask}, la librairie de validation \textbf{WTF-Forms}. Côté client, nous avons utilisé \textbf{Bootstrap3} pour la base du CSS et \textbf{Leaflet} pour l'affichage des cartes.
+
+\subsection{Base de donnée}
+
+Nous avons rapidement écarté \textbf{SQLite} car celui-ci ne permet pas d'accès concurrents.
+
+Notre choix s'est porté sur \textbf{Postgresql} plutôt que \textbf{MySQL} car le premier est un des moteurs les plus complets, puissants et rapides du marché. De plus, il permet, contrairement à MySQL, d'ajouter des contraintes et il supporte les \textit{ARRAY}.
+
+\subsection{Script d'insertion des données}
+
+\subsection{Modèles}
+
+Nous avons écrit un ORM minimal pour simplifier l'insertion, la mise à jour ainsi que le mapping résultat---objet.
+
+Pour cela, chaque modèle définit une liste de champs à sélectionner dans la base de donnée, la liste des champs en auto-increment (pour ne pas essayer de les définir à l'insertion) ainsi que les foreign-keys.
+
+La spécification des foreign-keys nous permet, lors de jointures de faire automatiquement le mapping pour les objets liés.
+
+L'ORM nous aide aussi à écrire des requêtes avec deux méthodes : la première est lors du \texttt{SELECT}, \texttt{Model.star()} renvoie la liste des champs préfixées par le nom de la table pour que nous n'ayons pas à l'écrire à chaque fois. La seconde est utile lors des \texttt{INSERT} et \texttt{UPDATE} et permet de spécifier toutes les colonnes utiles et nous permet aussi de ne pas devoir l'écrire à chaque fois.
+
+Le reste des requêtes apparaît en clair dans le code.
+
+\section{Apports personnels}
+
+\subsection{Intégration de Leaflet}
+
+Pour rendre l’interaction avec notre application plus visuelle nous avons ajouté des cartes à plusieurs endroits. Celles-ci sont affichées grâce à Leaflet, une bibliothèque Javascript libre et utilisent des fonds de carte OpenSreetMap.
+
+Nous affichons par exemple une carte avec tous les établissements sur la page d'accueil et nous la centrons sur la position courante de l'utilisateur (récupérée en Javascript) pour rendre l'accueil plus personnalisé.
+
+Une carte est aussi affichée lors d'une recherche et permet de visualiser rapidement les différents résultats.
+
+Pour finir, chaque page d'un établissement situe celui-ci sur une petite carte.
+
+\subsection{Interface responsive et mobile friendly}
+
+L'utilisation d'internet étant de plus en plus mobile, nous avons développé notre interface web en faisant attention que celle-ci soit facilement utilisable sur des terminaux mobiles grâce à une interface responsive qui s'adapte autant aux grands écrans de PC qu'à des petits smartphones an passant par des tablettes.
+
+\subsection{Design}
+
+Nous avons fait plus que simplement utiliser \textbf{Bootsrap} pour notre interface : nous avons écrit une série de règles css pour rendre notre site web moins générique et plus attrayant. Petite touche humoristique, nous nous sommes inspirés de la charte graphique du site \textit{Foursquare}, d'ou le nom de notre application : \textit{FourTriangle}.
+
+\subsection{Images}
+
+Chaque établissement dispose d'une photo qui peut être uploadée par les administrateurs. Celle-ci est affichée dans la liste des établissement ainsi que sous forme de bannière sur la page de l'établissement même.
+
+De plus, les utilisateurs ont aussi une photo sur leur profil. Pour cela, nous utilisons le service \textit{Gravatar} qui permet aux utilisateurs de définir leur photo de profil une seule fois et qu'elle apparaisse sur tous les sites web à la fois.
+
+\subsection{Recherche \textit{fuzzy}}
+
+\subsection{CRUD pour tous les modèles}
+
+
+\subsection{Sécurité}
+
+\subsection{Validation côté client}
+
+
 \end{document}
 
