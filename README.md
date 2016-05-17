@@ -12,8 +12,9 @@ Dépendances : `python3`, `postgresql`
     virtualenv ve
     source ve/bin/activate
     pip install -r requirements.txt
-    cd datas
     createdb horeca
+    psql -d horeca -f createdb.sql
+    cd datas
     python loadxml.py
 
 
