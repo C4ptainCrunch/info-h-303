@@ -26,3 +26,7 @@ Démarrez l'app avec :
 
     cd flask/
     python app.py
+
+
+Vous pouvez ensuite vous créer un compte ou utiliser un des utilisateurs déjà présents (leur mot de passe est indentique à leur nom d'utilisateur).
+Si vous avez besoin d'un administrateur, Boris:Boris est un bon choix ;)
