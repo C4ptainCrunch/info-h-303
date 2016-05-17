@@ -69,10 +69,10 @@ app.register_blueprint(comment_api, url_prefix='/comment')
 @app.route("/")
 def index():
     query = """
-    SELECT etablissement.*, AVG(comment.score) AS score FROM etablissement 
-    JOIN comment ON etablissement.id = comment.etablissement_id 
-    GROUP BY etablissement.id 
-    HAVING COUNT(*) >=3 
+    SELECT etablissement.*, AVG(comment.score) AS score FROM etablissement
+    JOIN comment ON etablissement.id = comment.etablissement_id
+    GROUP BY etablissement.id
+    HAVING COUNT(*) >=3
     ORDER BY avg(score)
     """
     g.cursor.execute(query)
@@ -147,16 +147,15 @@ def get_etablissement(pk):
 @app.route("/contribuer")
 def contribuer():
     querryAdmins = """
-    SELECT {} FROM users 
+    SELECT {} FROM users
     WHERE users.id IN (
-        SELECT etablissement.user_id FROM etablissement 
-        LEFT JOIN comment ON etablissement.id = comment.etablissement_id 
-        GROUP BY etablissement.id 
+        SELECT etablissement.user_id FROM etablissement
+        LEFT JOIN comment ON etablissement.id = comment.etablissement_id
+        GROUP BY etablissement.id
         HAVING BOOL_AND(comment.user_id IS NULL OR comment.user_id != etablissement.user_id)
     )
     """.format(models.User.star())
     admins = models.list_of(querryAdmins, [], models.User)
-    print(admins)
 
 
     querryFewComments = """
@@ -166,7 +165,6 @@ def contribuer():
     HAVING COUNT(*) <= 1
     """.format(models.Etablissement.star())
     etablissements = models.list_of(querryFewComments, [], models.Etablissement)
-    print(etablissements)
     return render_template("contribution.html", admins=admins, etablissements=etablissements)
 
 
@@ -185,4 +183,4 @@ def markdown_f(string):
     return Markup(markdown.markdown(string))
 
 if __name__ == "__main__":
-    app.run(debug=config.DEBUG)
+    app.run(debug=config.DEBUG, host="0.0.0.0", port=8000)

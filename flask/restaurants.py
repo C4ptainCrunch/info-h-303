@@ -44,7 +44,6 @@ def list_restaurants():
 def add_restaurant():
     form = forms.Restaurant(request.form)
     if request.method == 'POST' and form.validate():
-        print(form.openings.data)
         restaurant = models.Restaurant()
         restaurant.etablissement = models.Etablissement(created=datetime.now(), type="restaurant", user_id=g.user.id)
         form.populate_obj(restaurant)
@@ -56,6 +55,7 @@ def add_restaurant():
 
         restaurant.etablissement.insert(g.cursor)
         restaurant.etablissement_id = restaurant.etablissement.id
+        restaurant.etablissement.set_picture(form.etablissement.picture, request.files)
 
         restaurant.insert(g.cursor)
 
@@ -103,9 +103,10 @@ def edit_restaurant(etablissement_id):
 
     g.cursor.execute(query, [etablissement_id])
     data = g.cursor.fetchone()
-    restaurant = models.Restaurant.from_dict(data)
     if not data:
         return  abort(404)
+    restaurant = models.Restaurant.from_dict(data)
+    image = restaurant.etablissement.picture
 
     form = forms.Restaurant(request.form, obj=restaurant)
     form.openings.data = [forms.list_of_days[i[0]] for i in enumerate(restaurant.openings) if i[1]]
@@ -116,7 +117,8 @@ def edit_restaurant(etablissement_id):
         for d in form.openings.data:
             openings[forms.list_of_days.index(d)] = True
         restaurant.openings = openings
-
+        restaurant.etablissement.picture = image
+        restaurant.etablissement.set_picture(form.etablissement.picture, request.files)
         restaurant.etablissement.update(g.cursor)
         restaurant.update(g.cursor)
         return redirect(url_for('.show_restaurant', etablissement_id=restaurant.etablissement.id))

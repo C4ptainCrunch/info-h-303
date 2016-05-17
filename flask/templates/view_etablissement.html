@@ -80,11 +80,15 @@
                     {{e.phone}}
                 </p>
                 {% if e.url %}
-                <h4>Site web</h4>
-                <p>
-                    <i class="fa fa-laptop" aria-hidden="true"></i>
-                    <a href="{{e.url}}">{{e.url}}</a>
-                </p>
+                    <h4>Site web</h4>
+                    <p>
+                        <i class="fa fa-laptop" aria-hidden="true"></i>
+                        {% if e.url.startswith("http") %}
+                            <a href="{{e.url}}">{{e.url}}</a>
+                        {% else %}
+                            <a href="http://{{e.url}}">{{e.url}}</a>
+                        {% endif %}
+                    </p>
                 {% endif %}
                 <h4>Adresse</h4>
                 <address>

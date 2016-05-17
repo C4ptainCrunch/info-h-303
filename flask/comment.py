@@ -44,7 +44,7 @@ def edit_comment(cid):
     comment = models.Comment.from_dict(data)
     uid = comment.user_id
     epk = comment.etablissement_id
-    date = comment.date 
+    date = comment.date
 
     if g.user.id == uid or g.user.is_admin:
         form = forms.Comment(request.form, obj=comment)
@@ -52,7 +52,7 @@ def edit_comment(cid):
             form.populate_obj(comment)
             comment.user_id = uid
             comment.etablissement_id = epk
-            comment.date = data
+            comment.date = date
             comment.update(g.cursor)
             return redirect(url_for('get_etablissement', pk=epk))
     else:

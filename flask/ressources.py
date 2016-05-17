@@ -21,7 +21,6 @@ def auth_required(fn):
 def admin_required(fn):
     @wraps(fn)
     def outer(*args, **kwargs):
-        print(args)
         if g.user.is_admin:
             return fn(*args, **kwargs)
         else:

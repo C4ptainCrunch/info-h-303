@@ -44,6 +44,7 @@ def add_bar():
 
         bar.etablissement.insert(g.cursor)
         bar.etablissement_id = bar.etablissement.id
+        bar.etablissement.set_picture(form.etablissement.picture, request.files)
 
         bar.insert(g.cursor)
 
